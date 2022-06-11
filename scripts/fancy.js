@@ -72,6 +72,15 @@ class EventManager {
 	}
 }
 
-window.onload = () => {
+async function dataFetcher (addr) {
+	let response = await fetch(
+		document.location.origin + addr,
+		{method: "GET", mode: "same-origin", cache: "no-cache", credentials: "same-origin"}
+	)
+	return response.text();
+}
+
+window.onload = async () => {
 	const em = new EventManager();
+	document.querySelector("main").innerHTML+=await dataFetcher("/api" + document.location.pathname);
 }
