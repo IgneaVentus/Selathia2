@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<title>...</title>
+		<meta charset="utf-8">
+		<style>
+			body {
+				padding: 0px;
+				margin: 0px;
+				width: 100vw;
+				height: 100vh;
+				background-color: black;
+				color: silver;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			@keyframes text {
+				0% {
+					transform: rotateY(0deg);
+					color: rgb(255, 125, 0);
+				}
+				50% {
+					color: rgb(0, 125, 255);
+				}
+				100% {
+					transform: rotateY(359deg);
+					color: rgb(255, 125, 0);
+				}
+			}
+
+			main {
+				width:fit-content;
+				height: fit-content;
+				font-size: clamp(2rem, 20vh , 6rem);
+				animation: infinite text 6s linear;
+			}
+		</style>
+	</head>
+	<body>
+		<main>FUCK YOU</main>
+	</body>
+</html>

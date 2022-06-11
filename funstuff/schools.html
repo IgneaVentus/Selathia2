@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<title>Fuckooff</title> 
+		<style>
+			:root {
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+
+			body {
+				margin: 0px;
+				padding: 0px;
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background-color: purple;
+				background-image: url(https://th.bing.com/th/id/R.146ed4e0ccb1ea7134fc5542656accbb?rik=OUfTffyll8CbOw&pid=ImgRaw&r=0);
+				background-position: center;
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
+
+			main {
+				background-color: rgba(205, 205, 205, 0.1);
+				padding: 5px;
+				box-shadow:5px 5px 15px 5px rgba(205, 205, 205, 0.1) inset, -5px -5px 15px 5px rgba(205, 205, 205, 0.1) inset;
+				border-radius: 15px;
+				-webkit-backdrop-filter: blur(5px);
+				backdrop-filter: blur(5px);
+				display: grid;
+				gap: 3px;
+				grid-template-columns: repeat(5, 1fr);
+				grid-template-rows: repeat(3, 1fr);
+				grid-template-areas:
+					". A . B ."
+					"C G G G D"
+					". E . F .";
+				width: 60%;
+				height: 60%;
+				box-sizing: border-box;
+				overflow: hidden;
+			}
+
+			div {
+				width: 100%;
+				height: 100%;
+				padding: 2px;
+				display: flex;
+				flex-flow: column;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				color: silver;
+				font-weight: bold;
+			}
+
+			div > label {
+				width: 100%;
+			}
+
+			div > meter {
+				width: 100%;
+				transition: value 1s ease-out;
+			}
+
+			#alternation {
+				grid-area: B;
+			}
+
+			#runic {
+				grid-area: A;
+			}
+
+			#destruction {
+				grid-area: C;
+			}
+
+			#mysticism {
+				grid-area: D;
+			}
+
+			#illusion {
+				grid-area: E;
+			}
+
+			#music {
+				grid-area: F;
+			}
+
+			#choosebox {
+				grid-area: G;
+				justify-content: space-around;
+			}
+		</style>
+		<script>
+			class MagicSchool {
+				constructor (schoolName) {
+					this.name = schoolName;
+					this.value = 5;
+					this.link = document.querySelector("#" + this.name + "Bar");
+					this.updateValue = this.updateValue.bind(this);
+					this.reset = this.reset.bind(this);
+				}
+
+				updateValue (mageMod, bodyMod) {
+					this.value = this.value * mageMod + bodyMod;
+					this.link.value = this.value;
+				}
+
+				reset () {
+					this.value = 5;
+				}
+			}
+
+			class SchoolManager {
+
+				constructor () {
+					this.schools = [
+						new MagicSchool("alternation"),
+						new MagicSchool("destruction"),
+						new MagicSchool("mysticism"),
+						new MagicSchool("illusion"),
+						new MagicSchool("runic"),
+						new MagicSchool("music")
+					];
+					this.mageSelector = document.querySelector("#magetype");
+					this.bodySelector = document.querySelector("#bodycast");
+					document.querySelector("#magetype").addEventListener("change", this.refreshState.bind(this));
+					document.querySelector("#bodycast").addEventListener("change", this.refreshState.bind(this));
+					this.refreshState = this.refreshState.bind(this);
+					this.mageType = this.mageType.bind(this);
+					this.bodyType = this.bodyType.bind(this);
+				}
+
+				refreshState () {
+					let mageMod = this.mageType();
+					let bodyMod = this.bodyType();
+					if ( mageMod != "error" && bodyMod != "error") for (let i=0; i<6; i++) {
+						this.schools[i].reset();
+						this.schools[i].updateValue(mageMod[i], bodyMod[i]);
+					}
+				}
+
+				mageType () {
+					let magetype = this.mageSelector.value;
+					if (typeof magetype !== "undefined" && magetype != "") {
+						if (magetype=="thaumaturg") return [0.5, 1.5, 0.5, 1.5, 0.5, 1.5];
+						else if (magetype=="spellcaster") return [1.5, 0.5, 1.5, 0.5, 1.5, 0.5];
+					}
+					else return "error";
+				}
+
+				bodyType () {
+					let bodypart = this.bodySelector.value;
+					if (typeof bodypart !== "undefined" && bodypart != "") {
+						switch (bodypart) {
+							case "handL":
+							case "handR":
+								return [0, 2, 0, -1, 1, 0];
+							case "legL":
+							case "legR":
+								return [0, -1, 1, 1, 0, 1];
+							case "eyeL":
+							case "eyeR":
+								return [1, 0, 0, 1, 1, -1];
+							case "earL":
+							case "earR":
+								return [1, 1, 0, 1, -1, 0];
+							case "tongue":
+								return [0, 0, -1, 1, 0, 2];
+							case "nose":
+								return [-1, 0, 2, 1, 0, 0];
+						}
+					}
+					else return "error";
+				}
+			}
+
+			window.onload = () => {
+				const sm = new SchoolManager();
+			}
+		</script>
+	</head>
+	<body>
+		<main>
+			<div id="alternation">
+				<label for="alternationBar" class="progresslabel">Przemiana</label>
+				<meter id="alternationBar" value="0" min="0" max="10"></meter>
+			</div>
+			<div id="destruction">
+				<label for="destructionBar" class="progresslabel">Destrukcja</label>
+				<meter id="destructionBar" value="0" min="0" max="10"></meter>
+			</div>
+			<div id="mysticism">
+				<label for="mysticismBar" class="progresslabel">Mistycyzm</label>
+				<meter id="mysticismBar" value="0" min="0" max="10"></meter>
+			</div>
+			<div id="illusion">
+				<label for="illusionBar" class="progresslabel">Iluzja</label>
+				<meter id="illusionBar" value="0" min="0" max="10"></meter>
+			</div>
+			<div id="runic">
+				<label for="runicBar" class="progresslabel">Runy</label>
+				<meter id="runicBar" value="0" min="0" max="10"></meter>
+			</div>
+			<div id="music">
+				<label for="musicBar" class="progresslabel">Muzyka</label>
+				<meter id="musicBar" value="0" min="0" max="10"></meter>
+			</div>
+			<div id="choosebox">
+				<select name="magetype" id="magetype">
+					<option value="">Wybierz opcję...</option>
+					<option value="thaumaturg">Thaumaturgia</option>
+					<option value="spellcaster">Zaklinacz</option>
+				</select>
+				<select name="bodycast" id="bodycast">
+					<option value="">Wybierz opcję...</option>
+					<option value="handL">Lewa dłoń</option>
+					<option value="handR">Prawa dłoń</option>
+					<option value="legL">Lewa noga</option>
+					<option value="legR">Prawa noga</option>
+					<option value="nose">Nos</option>
+					<option value="earL">Lewe ucho</option>
+					<option value="earR">Prawe ucho</option>
+					<option value="eyeL">Lewe oko</option>
+					<option value="eyeR">Prawe oko</option>
+					<option value="tongue">Język</option>
+				</select>
+			</div>
+		</main>
+	</body>
+</html>

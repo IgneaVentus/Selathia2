@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ChillApp</title>
+        <style>
+            :root {
+                --orbRadiusStart: 30vh;
+                --orbRadiusEnd: 40vh;
+                --orbAnimTime: 5s;
+            }
+
+            body {
+                margin: 0px;
+                padding: 0px;
+                width: 100vw;
+                height: 100vh;
+                background-color: #a8cb62;
+            }
+
+            @keyframes orbPulse {
+                0% {
+                    width: var(--orbRadiusStart);
+                    height:var(--orbRadiusStart);
+                }
+                40% {
+                    width: var(--orbRadiusEnd);
+                    height: var(--orbRadiusEnd);
+                }
+                100% {
+                    width: var(--orbRadiusStart);
+                    height:var(--orbRadiusStart);
+                }
+            }
+
+            #orb {
+                position: relative;
+                display: inline-block;
+                width: var(--orbRadiusStart);
+                height: var(--orbRadiusStart);
+                border-radius: 50%;
+                margin-left: 50vw;
+                margin-top: 50vh;
+                transform: translate(-50%, -50%);
+                background-color: #62a8cb;
+                animation-name: orbPulse;
+                animation-duration: calc(var(--orbAnimTime)*2);
+                animation-iteration-count: infinite;
+                animation-direction: normal;
+            }
+
+            #slider {
+                position: absolute;
+                left: 5vw;
+                top: 50vh;
+                width: 50vh;
+                transform: translate(-50%, -50%) rotate(-90deg);
+                background: 519dd6 !important;
+                opacity: 0.6;
+                transition: opacity 2s;
+            }
+
+            #slider:hover {
+                opacity: 1.0;
+            }
+
+        </style>
+        <script defer>
+            const root = document.querySelector(":root")
+
+            function updateCSS(obj) {
+                root.style.setProperty("--orbAnimTime", obj.value+"s")
+            }
+        </script>
+    </head>
+    <body>
+        <div id="orb"></div>
+        <input type="range" min=1 max=10 value=5 id="slider" onchange="updateCSS(this)">
+    </body>
+</html>
