@@ -2,9 +2,10 @@
 	namespace App\Models;
 	
 	interface iModel {
-		function create ();
-		function read ();
-		function update ();
-		function delete ();
+		function __construct();
+		function create ($dataset);
+		function read ($name);
+		function update ($dataset);
+		function delete ($name);
 	}
 ?>

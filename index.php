@@ -6,14 +6,9 @@
 		require_once $filename;
 	}
 	require_once "./models/iModel.php";
-	require_once "./models/Selathia.php";
-	require_once "./models/maintenance.php";
-	
-	// Section for opening database connection. 
-	use \PDO;
-
-	$db = new PDO("sqlite:./data/central.db", null, null, array(PDO::ATTR_PERSISTENT => true));
-	$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+	foreach (glob("./models/*.php") as $filename) {
+		if (!str_contains($filename, "iModel")) require_once $filename;
+	}
 
 	// Routing section
 	$request_uri = explode("?", $_SERVER["REQUEST_URI"], 2);
@@ -30,16 +25,29 @@
 		case "Special":
 			require "./funstuff/infu.html";
 			break;
+		case "Characters":
+			if (isset($request_tree[1])) require "./funstuff/Characters/scripts/server.php";
+			else require "./funstuff/Characters/home.html";
+			break;
 		case "Serverside":
-			if ($request_tree[1]=="/Initialize") Models\initialize($db);
+			echo "Got ere' ".$request_tree[1];
+			if ($request_tree[1]=="Initialize") {
+				Models\initialize();
+			}
 			break;
 		case "api":
 			switch ($request_tree[1]) {
+				case "CRUD":
+					Controllers\CRUD\requestManager($request_method);
+					break;
 				case "Home":
 				case "":
 					Controllers\Home\requestManager($request_method);
 					break;
 			}
+			break;
+		case "CRUD":
+			return Controllers\CRUD\initialize();
 			break;
 		case "Home":
 		case "":

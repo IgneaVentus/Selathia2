@@ -1,0 +1,61 @@
+{
+    "name": "Agnes",
+    "surname": "Retro",
+    "race": "człowiek",
+    "sex": "female",
+    "age": "34",
+    "height": "169",
+    "belief": "Old gods",
+    "visage": {
+        "type": "img",
+        "content": "https://th.bing.com/th/id/OIP.317EpqBW2NxLIps7aZDLqwHaHa?pid=ImgDet&rs=1",
+        "txt": "Lean and well built, with black hair and ice cold, soul piercing blue eyes, this girl looks like walking razor wire. She has well defined, even sharp face bones and always seems at least a little pissed off"
+    },
+    "psyche": "Quite cheerful and enthusiastic about life, hates herpes",
+    "backstory": "Born in the late 70's, she witnessed her family die to a fucking aircraft bomb. From this moment on, she never was truly the same person she was before - she became unhinged, happy about anything and everything and everything and anything...",
+    "equipment": {
+        "weapons": {
+            "0": "Double handed sword",
+            "1": "Dagger"
+        },
+        "armor": {
+            "0": "Steel cuirass"
+        },
+        "clothing": {
+            "0": "Ligh lilac blouse",
+            "1": "Simple black knee-high skirt",
+            "2": "Leather shoes"
+        },
+        "other": {
+            "0": "Simple backpack",
+            "1": "Hairband"
+        }
+    },
+    "skillset": {
+        "0": {
+            "name": "Cooking",
+            "level": "Advanced",
+            "description": "She got quite good at cooking after spending most of her life alone"
+        },
+        "1": {
+            "name": "Dancing",
+            "level": "Expert",
+            "description": "Tried to dance the pain away. Didn't work. But got good at dancing."
+        },
+        "2": {
+            "name": "Dodging",
+            "level": "Advanced",
+            "description": "She's quite good ad jumping to the sides"
+        },
+        "3": {
+            "name": "Swordplay",
+            "level": "Intermediate",
+            "description": "Able to use the big knoif"
+        },
+        "4": {
+            "name": "Sneaking",
+            "level": "Basic",
+            "description": "Basic bitch at sneaky arts"
+        }
+    }
+}

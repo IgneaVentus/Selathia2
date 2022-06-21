@@ -11,7 +11,7 @@
 		switch ($method) {
 			case "GET":
 			default:
-				echo "Long, long fucking ago there was a fucking peaceful land of fucking dimfuckers in a fucking middle of bloody nowhere";
+				echo json_encode("Long, long fucking ago there was a fucking peaceful land of fucking dimfuckers in a fucking middle of bloody nowhere");
 		}
 	}
 ?>

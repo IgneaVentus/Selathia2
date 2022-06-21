@@ -72,15 +72,92 @@ class EventManager {
 	}
 }
 
-async function dataFetcher (addr) {
-	let response = await fetch(
-		document.location.origin + addr,
-		{method: "GET", mode: "same-origin", cache: "no-cache", credentials: "same-origin"}
-	)
-	return response.text();
+async function dataFetcher (addr, method, bodyData) {
+	let response;
+	if (bodyData != null && bodyData != "undefined" && method != "GET") {
+		response = await fetch (
+			document.location.origin + "/api/" + addr,
+			{
+				method: method,
+				mode: "same-origin",
+				cache: "no-cache",
+				credentials: "same-origin",
+				body: bodyData
+			}
+		)
+	}
+	else {
+		response = await fetch (
+			document.location.origin + "/api/" + addr,
+			{
+				method: method,
+				mode: "same-origin",
+				cache: "no-cache",
+				credentials: "same-origin"
+			}
+		)
+	}
+	return response.json();
+}
+
+function dataFieldUpdate () {
+	const opTarget = document.querySelector("#optarget");
+	const opType = document.querySelector("#optype");
+	switch(opTarget.value) {
+		case "category":
+			switch(opType.value) {
+				case "create":
+					let input = document.createElement("input");
+					input.name="catName";
+					input.id="catName";
+					input.type="text";
+					let label = document.createElement("label");
+					label.for = "catName";
+					label.innerText = "Nazwa kategorii: ";
+					buf = [label, input];
+					formLoader(buf);
+				break;
+				case "update":
+				break;
+				case "delete":
+				break;
+				default: break;
+			}
+			break;
+		case "tag":
+			break;
+		case "article":
+			break;
+		default: break;
+	}
+}
+
+function formLoader (dataArray) {
+	let form = document.querySelector("#cheekyField");
+	let execList = form.parentNode.children;
+	console.log(execList);
+	if (execList.length > 1) execList.forEach(item => {
+		if (item.type != "legend") item.remove();
+	});
+	dataArray.forEach(item => {
+		form.before(item);
+	});
 }
 
 window.onload = async () => {
 	const em = new EventManager();
-	document.querySelector("main").innerHTML+=await dataFetcher("/api" + document.location.pathname);
+	if (document.location.pathname.includes("CRUD")) {
+		const uniSelect = document.querySelector("#uniselect");
+		let options = await dataFetcher("CRUD", "GET", null);
+		options.forEach(universe => {
+			let buf = document.createElement("option");
+			buf.innerText = universe.name + " by " + universe.author;
+			buf.value = universe.id;
+			uniSelect.appendChild(buf);
+		});
+		const opTarget = document.querySelector("#optarget");
+		const opType = document.querySelector("#optype");
+		opType.addEventListener("change", dataFieldUpdate);
+		opTarget.addEventListener("change", dataFieldUpdate);
+	}
 }
