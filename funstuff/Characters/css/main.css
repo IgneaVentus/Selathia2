@@ -5,6 +5,22 @@
     --mainBase: #360029a1;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(transparent, var(--navColorB), transparent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-image: linear-gradient(transparent, var(--navColorA), transparent);
+}
+
 body {
     margin: 0px;
     padding: 0px;
@@ -14,6 +30,11 @@ body {
     background-size: cover;
     font-size: 1.3rem;
     color: silver;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
 }
 
 nav {
@@ -21,19 +42,16 @@ nav {
     flex-flow: row wrap;
     height: fit-content;
     width: 100vw;
-    position: absolute;
-    top: 0px;
-    left: 50vw;
-    transform: translateX(-50%);
+    height: 2rem;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     font-size: 1.2rem;
 }
 
 nav > a {
     background: linear-gradient(var(--navColorA), var(--navColorB)) no-repeat center;
     background-size: cover;
-    text-decoration: none;;
+    text-decoration: none;
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     border: 1px solid silver;
@@ -41,6 +59,7 @@ nav > a {
     font-weight: bold;
     box-sizing: border-box;
     color: silver;
+    height: 100%;
 }
 
 #navPrev {
@@ -53,14 +72,31 @@ nav > a {
 
 #navName {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowwrap;
     justify-content: center;
     align-items: center;
-    width: 40%;
-    height: fit-content;
+    width: 70%;
+    height: 100%;
     font-weight: bold;
     font-size: 1.5rem;
     background: linear-gradient(to right, #00000000, var(--mainBase), var(--gradientBase), var(--mainBase), #00000000) center no-repeat;
+}
+
+#navName > * {
+    margin: 0px;
+    padding: 0px 5%;
+    width: 32%;
+    text-align: center;
+}
+
+#navName > #charCur {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+#navName > :is(#charPrev, #charNext) {
+    font-size: 80%;
+    opacity: 0.8;
 }
 
 main {
@@ -126,6 +162,9 @@ main > * {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
 }
 
 .connect {
@@ -133,9 +172,10 @@ main > * {
     color: silver;
     border: none;
     font-size: 1.3rem;
-    width: 33%;
+    width: 100%;
     box-sizing: border-box;
     border-right: 1px silver solid;
+    cursor: pointer;
 }
 
 .connect.right {
@@ -143,7 +183,7 @@ main > * {
 }
 
 .connect.active {
-    background-color: var(--navColorB);
+    background-image: linear-gradient(to right, transparent, var(--navColorB), var(--navColorB), transparent);
 }
 
 #charDesc {
@@ -236,6 +276,15 @@ main > * {
     grid-area: eq;
 }
 
+#charAttr {
+    grid-area: attr;
+}
+
+#charAttr > p {
+    padding: 1%;
+    margin: 0px;
+}
+
 /* #charWeap {
     grid-area: eq;
 }
@@ -261,12 +310,14 @@ main > * {
     background-color: rgba(255,255,255, 0.1);
     border-radius: 5px 15px;
     transition: height 1s;
+    cursor: pointer;
 }
 
 .skillItem > * {
     padding: 0.25em;
     margin: 0px;
     height: fit-content;
+    pointer-events: none;
 }
 
 .skillItem > h3 {
@@ -275,4 +326,34 @@ main > * {
 
 .skillItem > p {
     display: none;
+}
+
+#lookup {
+    display: flex;
+    width: 100%;
+    height: 1.5rem;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#lookup > input {
+    border: none;
+    height: 100%;
+    border-radius: 20px 0px 0px 20px;
+    margin: 0px;
+    text-align: right;
+}
+
+.sideButton {
+    background-color: var(--navColorB);
+    height: 100%;
+    width: fit-content;
+    border-radius: 0px 20px 20px 0px;
+    color: silver;
+    padding: 5px;
+    box-sizing: border-box;
+    margin: 0px;
+    border: 1px solid silver;
+    text-align: center;
 }

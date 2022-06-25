@@ -1,103 +1,199 @@
-let charList = []
-let currentChar = 0
+const charList = new Array();
+const charNav = new Array();
+let currentChar = -1
 let maxChar = 0
 const prevButton = document.getElementById("navPrev")
 const navText = document.getElementById("navName")
 const nextButton = document.getElementById("navNext")
-function grabChar (name) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let character = this.responseText
-            character = character.slice(0, -1) // For some stupid reason my php keeps adding 1 to end of string
-            character = JSON.parse(character)
-            //document.getElementById("charName").innerText = (character.name+" "+character.surname)
-            document.querySelector("#charDesc > #innerDesc").innerText = character.visage.txt
-            document.getElementById("charAge").innerText = character.age+" letni "+character.race
-            document.getElementById("charHeight").innerText = character.height+" cm"
-            let sex = (character.sex=="female" ? "♀" : "♂") // Quick and short sex interpretation
-            document.getElementById("charSex").innerText = sex
-            document.getElementById("charBelief").innerText = character.belief
-            document.getElementById("charStory").innerText = character.backstory
-            if(character.visage.type=="img") {
-                document.getElementById("portrait").innerHTML = '<img src="'+character.visage.content+'" alt="Portret postaci">'
+
+class Character {
+    #name; #surname; #race; #age; #sex; #height; #belief; #psyche;
+    #desc = []; #weapons = []; #armor = []; #clothes = []; #other = [];
+    #skills = []; #attributes = []; #dataTable = new Map();
+
+    constructor (dataset) {
+        //binding functions
+        this.#itemRepeater.bind(this);
+        this.#skillRepeater.bind(this);
+        this.#attrRepeater.bind(this);
+        this.present.bind(this);
+
+        //creating properties
+        this.#name = dataset.name;
+        this.#surname = dataset.surname;
+        this.#race = dataset.race;
+        this.#age = dataset.age;
+        this.#dataTable.set("charAge", this.#age + " letni " + this.#race);
+        this.#sex = dataset.sex;
+        this.#dataTable.set("charSex", (this.#sex=="female" ? "♀" : "♂"));
+        this.#height = dataset.height;
+        this.#dataTable.set("charHeight", this.#height);
+        this.#belief = dataset.belief;
+        this.#dataTable.set("charBelief", this.#belief);
+        this.#desc["visage"] = dataset.visage;
+        this.#desc["psyche"] = dataset.psyche;
+        this.#dataTable.set("charDesc > #innerDesc", this.#desc["visage"].txt  + "\n\n" + this.#desc["psyche"]);
+        this.#dataTable.set("portrait", this.#desc["visage"].content);
+        this.#desc["backstory"] = dataset.backstory;
+        this.#dataTable.set("charStory", this.#desc["backstory"]);
+
+        //running support functions
+        this.#itemRepeater(dataset.equipment);
+        this.#skillRepeater(dataset.skillset);
+        this.#attrRepeater(dataset.attributes);
+    }
+
+    #itemRepeater (obj) {
+        for (let category in obj) {
+            let  i=0;
+            while (obj[category][i]!==undefined)
+            {
+                let buf = obj[category][i];
+                switch (category) {
+                    case "weapons":  this.#weapons.push(buf); break;
+                    case "clothing":  this.#clothes.push(buf); break;
+                    case "armor":  this.#armor.push(buf); break;
+                    case "other":  this.#other.push(buf); break;
+                }
+                i++;
             }
-            else if (character.visage.type=="txt") {
-                document.getElementById("portrait").innerText = character.visage.content
-            }
-            itemRepeater(character.equipment)
-            skillRepeater(character.skillset)
-            document.getElementById("navName").innerText=charList[currentChar];
         }
-    };
-    xhttp.open("GET", "/Characters/server?q=char_"+name, true);
-    xhttp.send()
-}
+        let buf = new Map();
+        buf.set("charWeap", this.#weapons);
+        buf.set("charArmor", this.#armor);
+        buf.set("charCloth", this.#clothes);
+        buf.set("charItems", this.#other);
+        this.#dataTable.set("charEquipment", buf);
+    }
 
-function initiate () {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let list = this.responseText
-            let i=0
-            list = JSON.parse(list)
-            for (character in list) {
-                charList[i++]=list[character]
-            }
-            maxChar = --i
+    #skillRepeater (obj) {
+        for (let skill in obj) {
+            if (obj[skill]!==undefined) this.#skills.push(obj[skill])
         }
-    };
-    xhttp.open("GET", "/Characters/server?q=all", false);
-    xhttp.send()
-}
+        this.#dataTable.set("charSkills", this.#skills);
+    }
 
-function itemRepeater (obj) { // Because going with every category with for loop is a pain
-    let weap = document.getElementById("charWeap"),
-     cloth = document.getElementById("charArmor"),
-      armor = document.getElementById("charCloth"),
-       other = document.getElementById("charItems");
-    weap.innerHTML = "";
-    cloth.innerHTML = "";
-    armor.innerHTML = "";
-    other.innerHTML = "";
-    for (category in obj) {
-        let  i=-1
-        while (obj[category][++i]!==undefined)
-        {
-            let newItem = document.createElement("p");
-            newItem.innerText = obj[category][i];
-            switch (category) {
-                case "weapons":  weap.appendChild(newItem); break;
-                case "clothing": cloth.appendChild(newItem); break;
-                case "armor": armor.appendChild(newItem); break;
-                case "other": other.appendChild(newItem); break;
+    #attrRepeater (obj) {
+        for (let attr in obj) {
+            if (obj[attr]!==undefined) this.#attributes[attr] = obj[attr];
+        }
+        this.#dataTable.set("charAttr", this.#attributes);
+    }
+
+    name() {
+        return this.#name + " " + this.#surname;
+    }
+
+    present () {
+        let d = document;
+        this.#dataTable.forEach((value, key) => {
+            switch (key) {
+            case "charEquipment" :
+                value.forEach((subvalue, subkey) => {
+                    // Assign category element to variable to not type so much, clean it of old entries
+                    let catBody = d.querySelector("#" + key + " > #" + subkey)
+                    catBody.innerHTML = "";
+                    for (let item in subvalue) {
+                        let buf = d.createElement("p");
+                        buf.innerText = subvalue[item];
+                        catBody.append(buf);
+                    }
+                });
+                break;
+            case "charSkills" :
+                // clear skill list before beggining
+                d.querySelector("#" + key).innerHTML = "";
+                for (let skill in value) {
+                    // create main div of single skill item
+                    let element = d.createElement("div");
+                    element.classList = "skillItem";
+                    // create buffer variable, add header with skill name and append to main div
+                    let buf = d.createElement("h3");
+                    buf.innerText = value[skill].name;
+                    element.append(buf);
+                    // change buffer to header with skill level and again append 
+                    buf = d.createElement("h4");
+                    buf.innerText = value[skill].level;
+                    element.append(buf);
+                    // the same but for skill description
+                    buf = d.createElement("p");
+                    buf.style.display = "none";
+                    buf.innerText = value[skill].description;
+                    element.append(buf);
+                    // finally append main div into the document and repeat
+                    d.querySelector("#" + key).appendChild(element);
+                }
+                break;
+            case "charAttr" : 
+                let attrfield = d.querySelector("#" + key)
+                attrfield.innerHTML = "";
+                for (let attr in value) {
+                    let buf = d.createElement("p");
+                    buf.innerText = attr + ": " + value[attr];
+                    attrfield.append(buf);
+                }
+                break;
+            case "portrait" : 
+                let portrait = d.querySelector("#" + key);
+                portrait.innerHTML = "";
+                if (value !== undefined && value != "" ) {
+                    let buf = document.createElement("img");
+                    buf.alt = "Portret postaci";
+                    buf.src = value;
+                    portrait.append(buf);
+                }
+                break;
+            default :
+                d.querySelector("#" + key).innerText = value;
+                break;
             }
-        } 
+        });
+        document.querySelectorAll(".skillItem").forEach(item => item.addEventListener("click", skillHandler));
     }
 }
 
-function skillRepeater (obj) {
-    let skillset = [], i=0
-    for (skill in obj) {
-        if (obj[skill]!==undefined) skillset[i++] = "<div class='skillItem' onclick='skillHandler(this)'><h3>"+obj[skill].name+"</h3> <h4>"+obj[skill].level+"</h4>\n<p style='display: none;'>"+obj[skill].description+"</p></div>"
-        else break
+async function charGrabber () {
+    let id = document.querySelector("#charID").value;
+    if (id !== undefined) {
+        if (!charNav.includes(id)) {
+            let response = await fetch("/Characters/server?q="+id, {
+                method: "GET",
+                mode: "cors",
+            });
+            let buf = await response.json();
+            charList[id] = new Character(await buf);
+            charNav.push(id);
+            maxChar++;
+            if (currentChar == -1) charChange("next");
+            charNavUpdate();
+        }
     }
-    document.getElementById("charSkills").innerHTML = ""
-    for (n=0;n<i;n++) {
-        document.getElementById("charSkills").innerHTML += skillset[n]
-    }
+}
 
+function charNavUpdate () {
+    let navChar = [
+        document.querySelector("#charPrev"),
+        document.querySelector("#charCur"),
+        document.querySelector("#charNext")
+    ]
+    let IDs = [ (currentChar-1 < 0 ? maxChar-1 : currentChar-1), currentChar, (currentChar+1 >= maxChar ? 0 : currentChar+1)];
+    console.log(IDs);
+    console.log(charList);
+    navChar[0].innerText = charList[charNav[IDs[0]]].name();
+    navChar[2].innerText = charList[charNav[IDs[2]]].name();
+    navChar[1].innerText = charList[charNav[IDs[1]]].name();
 }
 
 function charChange(direction) {
     if (direction == "next") {
-        if (++currentChar>maxChar) currentChar=0
+        if (++currentChar>maxChar-1) currentChar=0
     }
     else if (direction == "prev") {
-        if (--currentChar<0) currentChar=maxChar
+        if (--currentChar<0) currentChar=maxChar-1
     }
-    grabChar(charList[currentChar].replace(" ", "_"))
-    //document.querySelector(':root').style.setProperty("--gradientBase", "lightblue")
+
+    charList[charNav[currentChar]].present();
+    charNavUpdate();
 }
 
 function switchViewChar(target) {
@@ -135,14 +231,13 @@ function switchViewEq(target) {
     }
 }
 
-function skillHandler (skill) {
-    console.log(skill.style.display);
+function skillHandler (e) {
+    let skill = e.target;
     let checker = skill.lastChild.style.display;
     if (checker == "none") skill.lastChild.style.display = "initial";
     else skill.lastChild.style.display = "none";
 }
 
 window.onload = function () {
-    initiate()
-    grabChar(charList[currentChar].replace(" ", "_"))
+    document.querySelector("#charIDSubmit").addEventListener("click", charGrabber);
 }

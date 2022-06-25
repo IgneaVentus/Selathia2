@@ -1,14 +1,15 @@
 {
-    "name": "Avira",
-    "surname": "Starscrean",
-    "race": "człowiek",
-    "sex": "female",
-    "age": "19",
-    "height": "176",
-    "belief": "Old gods",
+    "id": 2,
+    "name": "Coza",
+    "surname": "Akira",
+    "race": "drow",
+    "sex": "male",
+    "age": "55",
+    "height": "157",
+    "belief": "Lolth",
     "visage": {
-        "type": "img",
-        "content": "https://th.bing.com/th/id/R.e06c79e9a1905f042d3527f3703479e2?rik=PhT%2bLY6HtulZlA&pid=ImgRaw&r=0",
+        "type": "",
+        "content": "",
         "txt": "Lean and well built, with black hair and ice cold, soul piercing blue eyes, this girl looks like walking razor wire. She has well defined, even sharp face bones and always seems at least a little pissed off"
     },
     "psyche": "Quite cheerful and enthusiastic about life, hates herpes",
@@ -41,6 +42,32 @@
             "name": "Dancing",
             "level": "Expert",
             "description": "Tried to dance the pain away. Didn't work. But got good at dancing."
+        },
+        "2": {
+            "name": "Dodging",
+            "level": "Advanced",
+            "description": "She's quite good ad jumping to the sides"
+        },
+        "3": {
+            "name": "Swordplay",
+            "level": "Intermediate",
+            "description": "Able to use the big knoif"
+        },
+        "4": {
+            "name": "Sneaking",
+            "level": "Basic",
+            "description": "Basic bitch at sneaky arts"
         }
+    },
+    "attributes": {
+        "Siła": 4,
+        "Wytrzymałość": 3,
+        "Kondycja": 7,
+        "Szybkość": 7,
+        "Zwinność": 8,
+        "Charyzma": 4,
+        "Siła Woli": 6,
+        "Inteligencja": 7,
+        "Spostrzegawczość": 7
     }
 }

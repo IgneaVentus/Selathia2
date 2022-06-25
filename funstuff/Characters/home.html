@@ -11,9 +11,9 @@
         <nav>
             <a href="#" id="navPrev" onclick="charChange('prev')"><<</a>
             <div id="navName">
-                <p></p>
-                <p></p>
-                <p></p>
+                <p id="charPrev"></p>
+                <p id="charCur" active></p>
+                <p id="charNext"></p>
             </div>
             <a href="#" id="navNext" onclick="charChange('next')">>></a>
         </nav>
@@ -35,14 +35,7 @@
             <div id="charSkills"></div>
             <div id="charStory"></div>
             <div id="charAge"></div>
-            <div id="charAttr">
-                <div id="charStrength">Siła: </div>
-                <div id="charSpeed">Szybkość: </div>
-                <div id="charAgility">Zwinność: </div>
-                <div id="charDexterity">Zręczność: </div>
-                <div id="charConstitution">Wytrzymałość: </div>
-                <div id="charMagicPotential">Potencjał magiczny: </div>
-            </div>
+            <div id="charAttr"></div>
             <div id="charEquipmentButtons">
                 <button class="connect left active" onclick="switchViewEq('weap')">Broń</button>
                 <button class="connect left-middle" onclick="switchViewEq('armor')">Pancerz</button>
@@ -60,5 +53,9 @@
                 </div>
             </div>
         </main>
+        <div id="lookup">
+            <input type="number" name="charID" id="charID" placeholder="ID postaci">
+            <button type="submit" class="sideButton" id="charIDSubmit">Załaduj!</button>
+        </div>
     </body>
 </html>
