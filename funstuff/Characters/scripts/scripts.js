@@ -156,7 +156,7 @@ async function charGrabber () {
     let id = document.querySelector("#charID").value;
     if (id !== undefined) {
         if (!charNav.includes(id)) {
-            let response = await fetch("/Characters/server?q="+id, {
+            let response = await fetch("/Funstuff/Characters/server?q="+id, {
                 method: "GET",
                 mode: "cors",
             });

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<title>;p</title>
+		<meta charset="utf-8">
+		<style>
+			:root {
+				--bgcolor: black;
+				--maincolor: #00e6bf20;
+				--textcolor: #c100e7ff;
+				--specialcolor: #e6bf00ff;
+				font-family: Georgia, 'Times New Roman', Times, serif;
+			}
+			body {
+				background-color: var(--bgcolor);
+				margin: 0px;
+				padding: 0px;
+				box-sizing: border-box;
+			}
+
+			body > * {
+				animation-name: entry, flicker;
+				animation-duration: 3s, 10s;
+				animation-delay: 0s, 3s;
+				animation-direction: normal, normal;
+				animation-iteration-count: 1, infinite;
+			}
+
+			nav {
+				border-width: 0px 5px 5px 0px !important;
+				border-radius: 0px 0px 45px 0px;
+				width: 40vw;
+				height: 2.2rem;
+				justify-content: space-around;
+				align-items: center;
+				left: 0px;
+				top: 0px;
+				
+			}
+
+			nav > a {
+				font-weight: bolder;
+				text-decoration: none;
+				color: inherit;
+			}
+
+			footer {
+				position: absolute;
+				bottom: 0px;
+				right: 0px;
+				width: 40vw;
+				height: 2.2rem;
+				justify-content: space-around;
+				align-items: center;
+				border-width: 5px 0px 0px 5px !important;
+				border-radius: 45px 0px 0px 0px;
+			}
+
+			nav, main, footer {
+				border-color: var(--maincolor);
+				border-width: 5px;
+				color: var(--textcolor);
+				box-sizing: border-box;
+				border-style: solid;
+				font-size: 1.5 rem;
+				background-color: var(--maincolor);
+				backdrop-filter: blur(10px);
+				display: flex;
+				flex-flow: row;
+				margin: 0px;
+				padding: 0.5rem;
+			}
+
+			main {
+				position: absolute;
+				margin: 50vh 0px 0px 50vw;
+				width: 70vw;
+				height: 40vh;
+				transform: translate(-50%, -50%);
+				border-radius: 0px 45px;
+			}
+
+			@keyframes entry {
+				0% {opacity: 0;}
+				70% {opacity: 0.7;}
+				80% {opacity: 0.6;}
+				90% {opacity: 0.7;}
+				100% {opacity: 1;}
+			}
+
+			@keyframes flicker {
+				0% {opacity: 1;}
+				10% {opacity: 1;}
+				11% {opacity: 0.6;}
+				12% {opacity: 1;}
+				60% {opacity: 1;}
+				61% {opacity: 0.6;}
+				62% {opacity: 1;}
+				65% {opacity: 1;}
+				66% {opacity: 0.6;}
+				67% {opacity: 1;}
+				100% {opacity: 1;}
+			}
+
+			form {
+				width: 100%;
+				height: 100%;
+			}
+
+		</style>
+	</head>
+	<body>
+		<nav>
+			<a href="">Home</a>
+			<a href="">Almost</a>
+			<a href="">Guh</a>
+		</nav>
+		<main>
+			<form name="ziggy" onsubmit="formManager(); return false" >
+				<fieldset>
+					<label>Podstawy</label>
+					<input type="text" id="title" placeholder="Title of article">
+					<select form="ziggy" id="type" oninput="switchManager()">
+						<option value="article">Artykuł</option>
+						<option value="img">Obrazek</option>
+					</select>
+					<button type="submit" id="subButton" disabled>Wyślij</button>
+				</fieldset>
+				<fieldset>
+					<legend id="suckmyleftit">Treść</legend>
+				</fieldset>
+			</form>
+		</main>
+		<footer>
+			<p>Made by <a href="http://github.com/IgneaVentus" target="_blank">IgneaVentus</a></p>
+		</footer>
+		<script async="false">
+			const fuckingFieldset = document.querySelector("#suckmyleftit").parentElement;
+			const originalFuckingFieldset = fuckingFieldset.innerHTML;
+			const submitter = document.querySelector("#subButton");
+			const main = document.querySelector("main");
+	
+			function formManager () {
+				const data = {"title": document.querySelector("#title").value, "type": document.querySelector("#type").value, "content": document.querySelector("#content").value};
+				const form = event.target;
+				console.log(form);
+				let buf = document.createElement(data.type);
+				if (data.type == "article") { 
+					buf.innerHTML = ("<h2>" + data.title + "</h2>\n");
+					buf.innerHTML += data.content;
+				}
+				else if (data.type == "img") buf.src = data.content;
+				main.innerHTML = null;
+				main.append(buf);
+
+			}
+			function switchManager () {
+				let elemBuf;
+				fuckingFieldset.innerHTML = originalFuckingFieldset;
+				switch (event.target.value) {
+					case "article": elemBuf = inputConstructor("content", "textarea", null);
+									elemBuf.form = "ziggy";
+									fuckingFieldset.append(elemBuf);
+									break;
+					case "img":		elemBuf = inputConstructor("content", "text", "Adres url obrazka");
+									fuckingFieldset.append(elemBuf);
+									break;
+					default: break;
+				}
+				(submitter.getAttribute("disabled") != null) ? submitter.removeAttribute("disabled") : null;
+			}
+	
+			function inputConstructor (id, type, placeholder) {
+				console.log("Input constructor fired.\nID: %s\nTYPE: %s\nPLACEHOLDER TEXT: %s", id, type, placeholder);
+				let buf;
+				(type == "textarea") ? buf = document.createElement(type) : buf=document.createElement("input"), buf.type = type;
+				console.log(buf);
+				buf.id = id;
+				if (placeholder != null && placeholder != "null") buf.placeholder = placeholder;
+				return buf;
+			}
+		</script>
+	</body>
+</html>

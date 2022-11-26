@@ -1,0 +1,133 @@
+body {
+	background-color: black;
+	margin: 0px;
+	padding: 0px;
+}
+body * {
+	box-sizing: border-box;
+}
+#storyModal {
+	margin: 1rem auto;
+	padding: 1rem;
+	width: 75vw;
+	background: repeating-linear-gradient(0deg, rgba(200,255,200,0.1), rgba(200,255,200,0.1), rgba(200,255,200,0.3), rgba(200,255,200,0.1), rgba(200,255,200,0.1) 3px) center;
+	background-color: rgba(160, 208, 240, 0.3);
+	border-radius: 25px;
+}
+#storyModal > div > #banner {
+	max-width: 100%;
+	max-height: 60vh;
+	width: auto;
+	margin: 1rem auto 2rem auto;
+	display: block;
+}
+#storyModal > div > article {
+    overflow-wrap: break-word;
+	font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+h1 {
+	text-align: center;
+	display: block;
+	padding: 0px;
+	margin: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+input, textarea {
+	width: 100%;
+	margin-bottom: 1rem;
+}
+input {
+	height: 2rem;
+	border-radius: 10px;
+	font-size: 1.2rem;
+}
+textarea {
+	height: 40vh;
+	font-size: 1rem;
+	padding: 1%;
+	resize: none;
+	border-radius: 10px;
+}
+label {
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: silver;
+}
+.buttons {
+	padding: 0px;
+	margin: 0px;
+	display: flex;
+	flex-flow: row nowrap;
+	height: 2rem;
+	width: 100%;
+	transition: filter 1s;
+}
+.buttons > button {
+	height: 100%;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+	color: silver;
+	font-size: 1.5rem;
+	font-weight: bold;
+	border: 1px silver solid;
+}
+.buttons > .left {
+	border-radius: 15px 0px 0px 15px;
+	background-color: darkred;
+}
+.buttons > .right {
+	border-radius: 0px 15px 15px 0px;
+	background-color: darkgreen;
+}
+.buttons > button:hover {
+	filter:	brightness(125%);
+}
+
+#fancyLoader {
+	z-index: 1;
+	position: absolute;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
+	top: 0px;
+	left: 0px;
+	height: 100vh;
+	width: 100vw;
+	background-color: rgba(0,0,0,0.7);
+}
+@keyframes loadingBar {
+	0% {width: 30%; background-color: yellow; margin: 0% 40%; transform: rotate(0deg);}
+	50% {width: 32%; background-color: lightskyblue; margin: 0% 34%; transform: rotate(180deg);}
+	100% {width: 30%; background-color: yellow; margin: 0% 40%; transform: rotate(360deg);}
+}
+#fancyBar {
+	width: 30%;
+	height: 3rem;
+	background-color: blue;
+	margin: 0% 50%;
+	border-radius: 30px;
+	animation-name: loadingBar;
+	animation-duration: 2s;
+	animation-direction: normal;
+	animation-iteration-count: infinite;
+}
+
+/* Fancy stuff meant for operating shit */
+
+.row {
+	display: flex;
+	flex-flow: row wrap;
+}
+.row > div {
+	flex-basis: 50%;
+	flex-grow: 25%;
+	flex-shrink: 25%;
+}
+.stopAnim {
+	animation-play-state: paused;
+}
+.disabled {
+	display: none !important;
+}

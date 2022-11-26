@@ -16,10 +16,12 @@ class EventManager {
 	searchmod (e) {
 		if (e.type=="focus") {
 			this.modal.style.transform = "translateX(0%)";
+			this.modal.style.width = "clamp(300px, 60vw, 600px)";
 			this.modal.style.backgroundColor = "var(--glassBG)";
 		}
 		else if (e.type=="blur") {
 			this.modal.style.transform = "translateX(95%)";
+			this.modal.style.width = "";
 			this.modal.style.backgroundColor = "var(--glassBGinactive)";
 		}
 	}
