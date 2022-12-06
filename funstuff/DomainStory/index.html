@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<meta name="author" content="Ignea Ventus">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/funstuff/DomainStory/data/main.css">
+		<script src="/funstuff/DomainStory/data/operator.js" defer></script>
+	</head>
+	<body>
+		<main id="storyModal">
+			<div id="grower">
+				<form id="articleAdder" name="articleAdder">
+					<div class="row">
+						<div>
+							<label for="id">Numer ID: </label>
+							<input id="articleID" type="number" name="id" value="0" autocomplete="off" disabled>
+						</div>
+						<div>
+							<label for="password">Hasło artykułu: </label>
+							<input type="password" name="password" autocomplete="off" placeholder="Wymagane do usunięcia/modyfikacji" required>
+						</div>
+					</div>
+					<div class="row">
+						<div>
+							<label for="title">Tytuł artykułu: </label>
+							<input type="text" name="title" autocomplete="off" placeholder="Całkowicie oryginalny tytuł artykułu" required>
+						</div>
+						<div>
+							<label for="banner">Link do baneru (Opcjonalne): </label>
+							<input type="text" name="url" autocomplete="off" placeholder="http://niekradzione.linki/p/jakisobrazek.jpg">
+						</div>
+					</div>
+					<label for="mainArticle">Artykuł: </label>
+					<textarea form="articleAdder" id="mainArticle" name="content" autocomplete="off" required></textarea>
+					<div class="buttons">
+						<button type="reset" class="left">RESET</button>
+						<button type="submit" class="right">ZAPISZ</button>
+					</div>
+				</form>
+			</div>
+			<div id="shower" class="disabled">
+				<h1 id="title"></h1>
+				<img id="banner" src="" alt="Banner of the story">
+				<article id="content"></article>
+			</div>
+		</main>
+		<div id="fancyLoader" class="disabled">
+			<div id="fancyBar" class="stopAnim">
+		</div>
+	</body>
+</html>

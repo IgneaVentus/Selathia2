@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<title>Out of Touch</title>
+		<style>
+			root {
+				margin: 0px;
+				padding: 0px;
+			}
+			body {
+				display: flex;
+				flex-flow: row nowrap;
+				justify-content: center;
+				align-items: flex-end;
+				width: 100vw;
+				height: 100vh;
+				background-color: black;
+				margin: 0px;
+				padding: 0px;
+			}
+			.dasline {
+				stroke: violet;
+				stroke-width: 2px;
+			}
+
+			.dasline.top {
+				stroke-width: 4px;
+			}
+
+			#grid {
+				width: 100%;
+				height: 40%;
+			}
+		</style>
+	</head>	
+	<body>
+		<svg id="grid"></svg>
+		<script defer>
+
+			class SVGManager {
+				movingLines = [];
+				
+				constructor () {
+					this.lineCreator.bind(this);
+					this.moveController.bind(this);
+					this.moveLineAdder.bind(this);
+					this.mover.bind(this);
+					setTimeout(() => {
+						this.svg = document.querySelector("#grid");
+						this.width = this.svg.width.baseVal.value;
+						this.height = this.svg.height.baseVal.value;
+						this.populator();
+						setInterval(this.moveController.bind(this), 50);
+					}, 1);
+				}
+
+				populator () {
+					const motherline = this.lineCreator((this.width/2), (this.width/2), 0, this.height, 0, "");
+					this.svg.append(motherline)
+					for (let i = this.width/2; i>0; i-=50) {
+						motherline.after(this.lineCreator((this.width/2)+i, (this.width/2)+(i*4), 0, this.height,  "dasline"));
+						if (!i==0) motherline.before(this.lineCreator((this.width/2)-i, (this.width/2)-(i*3), 0, this.height,  "dasline"));
+					}
+					this.svg.prepend(this.lineCreator(0, this.width, 0, 0, "dasline top"));
+				}
+
+				lineCreator (x1, x2, y1, y2, className) {
+					let newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+					newLine.setAttribute("x1", x1);
+					newLine.setAttribute("y1", y1);
+					newLine.setAttribute("x2", x2);
+					newLine.setAttribute("y2", y2);
+					newLine.setAttribute("class", className);
+					return newLine;
+				}
+
+				moveController () {
+					let lineCount = parseInt(this.movingLines.length);
+					if (lineCount < 1 || lineCount < 3 && this.movingLines[lineCount-1]?.getAttribute("y1") > this.height*0.1 ) {
+						this.moveLineAdder(null);
+					}
+					this.mover();
+				}
+
+				async mover () {
+					this.movingLines.forEach((line, index) => {
+						let currHeight = parseInt(line.getAttribute("y1"));
+						if (currHeight < this.height) {
+							let jump = 1 + (currHeight * 0.1);
+							line.setAttribute( "y1", currHeight + jump );
+							line.setAttribute( "y2", currHeight + jump );
+						}
+						else {
+							line.remove();
+							this.movingLines.splice(index, 1);
+						}
+					})
+				}
+
+				moveLineAdder (index) {
+					let movingLine = this.lineCreator(0, this.width, 0, 0, "dasline move");
+					this.movingLines.push(movingLine);
+					this.svg.append(movingLine);
+				}
+
+			}
+
+			window.onload = () => {
+				new SVGManager;
+			}
+		</script>
+	</body>
+</html>

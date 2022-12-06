@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset='utf-8'>
+		<style>
+			:root {
+				--colA: cyan;
+				--colB: magenta;
+				--colC: yellow;
+				background-color: black;
+			}
+			body {
+				width: 100vw;
+				height: 100vh;
+				margin: 0px;
+				padding: 0px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			main > .overlay {
+				display:block;
+				position: absolute;
+				transition: background-color 1s;
+				filter: blur(80px);
+				border-radius: 100px;
+				z-index: -1;
+			}
+			main p {
+				font-size: 64px;
+				color: silver;
+			}
+		</style>
+		<script defer>
+			let i = 0;
+			const colorArr = ['colA', 'colB', 'colC'];
+			let elem1, elem2;
+
+			function disco() {
+				elem1.style.left = elem2.offsetLeft+'px';
+				elem1.style.top = elem2.offsetTop+'px';
+				elem1.style.height = elem2.clientHeight+'px';
+				elem1.style.width = elem2.clientWidth+'px';
+				elem1.style.backgroundColor = 'var(--'+colorArr[i++ % 3]+')';
+			}
+
+			window.onload = function () {
+				elem1 = document.querySelector('.overlay');
+				elem2 = document.querySelector('#this');
+				setInterval(disco, 900);
+			}
+		</script>
+
+	</head>
+	<body>
+		<main>
+			<p id='this'>This is a text!</p>
+			<div class='overlay'></div>
+		</main>
+	</body>
+</html>

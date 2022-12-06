@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/funstuff/Characters/css/main.css">
+        <title>Suck my pinkie</title>
+        <script src="/funstuff/Characters/scripts/scripts.js" defer></script>
+    </head>
+    <body>
+        <nav>
+            <a href="#" id="navPrev" onclick="charChange('prev')"><<</a>
+            <div id="navName">
+                <p id="charPrev"></p>
+                <p id="charCur" active></p>
+                <p id="charNext"></p>
+            </div>
+            <a href="#" id="navNext" onclick="charChange('next')">>></a>
+        </nav>
+        <main>
+            <div id="portrait"></div>
+            <div id="charButtons">
+                <button class="connect left" onclick="switchViewChar('skills')">Umiejętności</button>
+                <button class="connect middle active" onclick="switchViewChar('desc')">Opis</button>
+                <button class="connect right" onclick="switchViewChar('story')">Historia</button>
+            </div>
+            <div id="charDesc">
+                <div id="innerDesc"></div>
+                <div id="charDescBar">
+                    <div id="charHeight" class="connect left"></div>
+                    <div id="charSex" class="connect middle"></div>
+                    <div id="charBelief" class="connect right"></div>
+                </div>
+            </div>
+            <div id="charSkills"></div>
+            <div id="charStory"></div>
+            <div id="charAge"></div>
+            <div id="charAttr"></div>
+            <div id="charEquipmentButtons">
+                <button class="connect left active" onclick="switchViewEq('weap')">Broń</button>
+                <button class="connect left-middle" onclick="switchViewEq('armor')">Pancerz</button>
+                <button class="connect right-middle" onclick="switchViewEq('cloth')">Ubrania</button>
+                <button class="connect right" onclick="switchViewEq('misc')">Akcesoria</button>
+            </div>
+            <div id="charEquipment">
+                <div id="charWeap">
+                </div>
+                <div id="charArmor">
+                </div>
+                <div id="charCloth">
+                </div>
+                <div id="charItems">
+                </div>
+            </div>
+        </main>
+        <div id="lookup">
+            <input type="number" name="charID" id="charID" placeholder="ID postaci">
+            <button type="submit" class="sideButton" id="charIDSubmit">Załaduj!</button>
+        </div>
+    </body>
+</html>
