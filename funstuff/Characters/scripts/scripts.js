@@ -156,16 +156,15 @@ async function charGrabber () {
     let id = document.querySelector("#charID").value;
     if (id !== undefined) {
         if (!charNav.includes(id)) {
-            let response = await fetch("/Funstuff/Characters/server?q="+id, {
-                method: "GET",
-                mode: "cors",
-            });
-            let buf = await response.json();
-            charList[id] = new Character(await buf);
-            charNav.push(id);
-            maxChar++;
-            if (currentChar == -1) charChange("next");
-            charNavUpdate();
+            fetch("/Misc/Characters/API?q="+id)
+            .then(data => data.json())
+            .then(data => {
+                charList[id] = new Character(data);
+                charNav.push(id);
+                maxChar++;
+                if (currentChar == -1) charChange("next");
+                charNavUpdate();
+            })
         }
     }
 }

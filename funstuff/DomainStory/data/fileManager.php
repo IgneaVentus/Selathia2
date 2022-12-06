@@ -116,16 +116,18 @@
 		$update = false;
 		$buf->reinit();
 		if (isset($_POST["title"]) && isset($_POST["url"]) && isset($_POST["content"])) {
+			// Check whether the ID and Password are both set. If they are it means update takes place
+			// If so, check if password is correct and then proceed to allow update if it is, else stop
 			if (isset($_POST["id"]) && isset($_POST["password"])) {
 				$buf->id = $_POST["id"];
 				$succ = $buf->read();
 				if ($succ) {
-					if (!$buf->passwordMatch($_POST["password"])) {
+					if ($buf->passwordMatch($_POST["password"])) $update = true;
+					else {
 						$res->content = "Error: Wrong password";
 						echo json_encode($res);
 						return 0;
 					}
-					else $update = true;
 				}
 				else {
 					$res->content = "Error: Article not found";

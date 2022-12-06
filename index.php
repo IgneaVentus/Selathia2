@@ -30,7 +30,9 @@
 					require "./funstuff/schools.html";
 					break;
 				case "Characters":
-					if (isset($request_tree[2])) require "./funstuff/Characters/scripts/server.php";
+					if (isset($request_tree[2])) {
+						if ($request_tree[2] == "API") require "./funstuff/Characters/scripts/server.php";
+					}
 					else require "./funstuff/Characters/home.html";
 					break;
 				case "Shimmer":
