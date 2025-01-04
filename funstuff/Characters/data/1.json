@@ -35,31 +35,37 @@
     "skillset": {
         "0": {
             "name": "Cooking",
-            "level": "Advanced",
+            "level": "3",
             "description": "She got quite good at cooking after spending most of her life alone"
         },
         "1": {
             "name": "Dancing",
-            "level": "Expert",
+            "level": "4",
             "description": "Tried to dance the pain away. Didn't work. But got good at dancing."
         },
         "2": {
             "name": "Dodging",
-            "level": "Advanced",
+            "level": "3",
             "description": "She's quite good ad jumping to the sides"
         },
         "3": {
             "name": "Swordplay",
-            "level": "Intermediate",
+            "level": "2",
             "description": "Able to use the big knoif"
         },
         "4": {
             "name": "Sneaking",
-            "level": "Basic",
+            "level": "1",
             "description": "Basic bitch at sneaky arts"
+        },
+        "4": {
+            "name": "Nyeh",
+            "level": "0",
+            "description": "Nyehehehehehe"
         }
     },
     "attributes": {
+        "Maxlvl": 10,
         "Siła": 4,
         "Wytrzymałość": 3,
         "Kondycja": 7,

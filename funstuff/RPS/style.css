@@ -1,0 +1,250 @@
+/* Defining color variables for use in the scheme */
+:root {
+	--bg-color: white;
+	--bg-color-filter: rgba(255,255,255,0.3);
+	--svg-color: #000000;
+	--ui-color: black;
+	--player-color: blue;
+	--pc-color: red;
+}
+
+/* Basic body setup for inheritance purposes */
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	background-color: var(--bg-color);
+	border-color: var(--ui-color);
+	color: var(--ui-color);
+	font-size: 1.5rem;
+	border-style: solid;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+
+main {
+	width: 100dvw;
+	max-width: 1400px;
+	height: 100dvh;
+	display: grid;
+	grid-template-areas: 
+	"top top top"
+	"left mid right"
+	"bottom bottom bottom";
+	grid-auto-rows: 3rem auto 3rem;
+	grid-auto-columns: 40% 20% 40%;
+}
+
+body * {
+	box-sizing: inherit;
+	background-color: inherit;
+	border-color: inherit;
+	color: inherit;
+}
+
+body > p {
+	background-color: none;
+}
+
+/* Top and bottom bar  */
+#topBar, #bottomBar {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-around;
+	align-items: center;
+	border-style: solid;
+	background-color: var(--bg-color);
+	width: 100%;
+	z-index: 2;
+}
+
+#topBar > p, #bottomBar > p {
+	width: 33%;
+	text-align: center;
+}
+
+/* Top bar */
+#topBar {
+	grid-area: top;
+	border-width: 0px 3px 3px 3px;
+}
+
+#topBar > p > #scorePlayer {
+	color: var(--player-color);
+}
+
+#topBar > p > #scorePC {
+	color: var(--pc-color);
+}
+
+/* Bottom bar */
+#bottomBar {
+	grid-area: bottom;
+	border-width: 3px 3px 0px 3px;
+}
+
+#bottomBar > * {
+	width: 33%;
+}
+
+#style {
+	margin: 24px 0px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-flow: row nowrap;
+}
+
+#style > select {
+	border-style: none;
+	background-color: none;
+	font-size: 1.5rem;
+	font-family: inherit;
+}
+
+#style > * {
+	height: 1.5rem;
+	font-size: 1.5rem;
+	padding: 0px;
+	margin: 0px;
+}
+
+/* Main game screen */
+
+#leftSide, #center, #rightSide  {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: none;
+}
+
+#center {
+	grid-area: mid;
+	display: flex;
+	flex-flow: column;
+	justify-content: space-evenly;
+	align-items: center;
+	flex-shrink: 1.5;
+	border-width: 0px 3px;
+	border-style: solid;
+	z-index: 1;
+}
+
+#center > button {
+	width: 100%;
+	height: 3rem;
+	font-size: 1.5rem;
+	border-width: 3px 0px;
+	background-image: radial-gradient(var(--bg-color) 70%, var(--ui-color));
+}
+
+/* Result screen */
+
+#resultScreen {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	width: 100dvw;
+	height: 100dvh;
+	z-index: 3;
+	background-color: var(--bg-color-filter);
+	backdrop-filter: blur(5px);
+}
+
+#resultScreen * {
+	padding: 0rem;
+	margin: 1rem;
+	background: none;
+	text-align: center;
+}
+
+.resultText {
+	font-size: 4rem;
+}
+
+#resetButton {
+	border-radius: 25px;
+	border-width: 0px 3px;
+	font-size: inherit;
+	padding: 0.5rem 1rem;
+}
+
+/* Setting images to display correctly */
+
+#leftSide {
+	grid-area: left;
+	transform: rotateZ(90deg);
+	animation: 1s ease-in infinite paused rockingLeft;
+}
+
+#rightSide {
+	grid-area: right;
+	transform: rotateZ(270deg) rotateY(180deg);
+	animation: 1s ease-in infinite paused rockingRight;
+}
+
+div > svg, div > img {
+	width: auto;
+	height: 30dvh;
+	max-height: 30dvw;
+}
+
+/* Debug and stuff to clear later */
+
+/* Effects and toggles */
+.disabled {
+	display: none !important;
+}
+.animated {
+	animation-play-state: running !important;
+}
+.hidden {
+	opacity: 0 !important;
+}
+
+/* Animations. Fuck your JS, I am a fucking engineer */
+
+@keyframes rockingLeft {
+	0% {
+		transform: rotateZ(90deg);
+	}
+	30% {
+		transform: rotateZ(45deg);
+	}
+	40% {
+		transform: rotateZ(90deg);
+	}
+	90% {
+		transform: rotateZ(45deg);
+	}
+	100% {
+		transform: rotateZ(90deg);
+	}
+}
+
+@keyframes rockingRight {
+	0% {
+		transform: rotateZ(270deg) rotateY(180deg);
+	}
+	30% {
+		transform: rotateZ(315deg) rotateY(180deg);
+	}
+	40% {
+		transform: rotateZ(270deg) rotateY(180deg);
+	}
+	90% {
+		transform: rotateZ(315deg) rotateY(180deg);
+	}
+	100% {
+		transform: rotateZ(270deg) rotateY(180deg);
+	}
+}

@@ -9,7 +9,7 @@
     "belief": "Old gods",
     "visage": {
         "type": "img",
-        "content": "https://th.bing.com/th/id/OIP.317EpqBW2NxLIps7aZDLqwHaHa?pid=ImgDet&rs=1",
+        "content": "https://i.pinimg.com/originals/cf/61/d5/cf61d563013cf829deb56e10b32e681b.jpg",
         "txt": "Lean and well built, with black hair and ice cold, soul piercing blue eyes, this girl looks like walking razor wire. She has well defined, even sharp face bones and always seems at least a little pissed off"
     },
     "psyche": "Quite cheerful and enthusiastic about life, hates herpes",
@@ -60,6 +60,7 @@
         }
     },
     "attributes": {
+        "Maxlvl": 10,
         "Siła": 4,
         "Wytrzymałość": 3,
         "Kondycja": 7,

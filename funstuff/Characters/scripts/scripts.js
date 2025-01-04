@@ -2,12 +2,13 @@ const charList = new Array();
 const charNav = new Array();
 let currentChar = -1
 let maxChar = 0
+let imageState = 0
 const prevButton = document.getElementById("navPrev")
 const navText = document.getElementById("navName")
 const nextButton = document.getElementById("navNext")
 
 class Character {
-    #name; #surname; #race; #age; #sex; #height; #belief; #psyche;
+    #name; #surname; #race; #age; #sex; #height; #belief; #maxlvl; #psyche;
     #desc = []; #weapons = []; #armor = []; #clothes = []; #other = [];
     #skills = []; #attributes = []; #dataTable = new Map();
 
@@ -23,7 +24,7 @@ class Character {
         this.#surname = dataset.surname;
         this.#race = dataset.race;
         this.#age = dataset.age;
-        this.#dataTable.set("charAge", this.#age + " letni " + this.#race);
+        this.#dataTable.set("charAge", this.#age + ((dataset.sex=="female") ? " letnia " : " letni ") + this.#race);
         this.#sex = dataset.sex;
         this.#dataTable.set("charSex", (this.#sex=="female" ? "♀" : "♂"));
         this.#height = dataset.height;
@@ -75,7 +76,10 @@ class Character {
 
     #attrRepeater (obj) {
         for (let attr in obj) {
-            if (obj[attr]!==undefined) this.#attributes[attr] = obj[attr];
+            if (obj[attr]!==undefined) {
+                if (attr=="Maxlvl") this.maxlvl = obj[attr];
+                else this.#attributes[attr] = obj[attr];
+            }
         }
         this.#dataTable.set("charAttr", this.#attributes);
     }
@@ -107,17 +111,21 @@ class Character {
                     // create main div of single skill item
                     let element = d.createElement("div");
                     element.classList = "skillItem";
-                    // create buffer variable, add header with skill name and append to main div
-                    let buf = d.createElement("h3");
-                    buf.innerText = value[skill].name;
-                    element.append(buf);
-                    // change buffer to header with skill level and again append 
+                    let buf;
+                    // create buffer variable, add header with skill level and append to main div
+                    // but only if the level is above 0
+                    if (value[skill].level > 0) {
+                        buf = d.createElement("h4");
+                        buf.innerText = value[skill].level;
+                        element.append(buf);
+                    }
+                    // change buffer to header with skill name and again append 
                     buf = d.createElement("h4");
-                    buf.innerText = value[skill].level;
+                    buf.innerText = value[skill].name;
                     element.append(buf);
                     // the same but for skill description
                     buf = d.createElement("p");
-                    buf.style.display = "none";
+                    //buf.style.display = "none";
                     buf.innerText = value[skill].description;
                     element.append(buf);
                     // finally append main div into the document and repeat
@@ -127,7 +135,23 @@ class Character {
             case "charAttr" : 
                 let attrfield = d.querySelector("#" + key)
                 attrfield.innerHTML = "";
-                for (let attr in value) {
+                if (this.maxlvl != undefined) {
+                    for (let attr in value) {
+                        let attribute = d.createElement("div");
+                        let label = d.createElement("label");
+                        label.innerText = attr;
+                        label.setAttribute("for", "#"+attr);
+                        attribute.append(label);
+                        let bar = d.createElement("meter");
+                        bar.setAttribute("min", "0");
+                        bar.setAttribute("max", ""+this.maxlvl);
+                        bar.setAttribute("value", value[attr]);
+                        attribute.append(bar);
+                        attribute.setAttribute("title", attr+": "+value[attr]);
+                        attrfield.append(attribute);
+                    }
+                }
+                else for (let attr in value) {
                     let buf = d.createElement("p");
                     buf.innerText = attr + ": " + value[attr];
                     attrfield.append(buf);
@@ -135,12 +159,15 @@ class Character {
                 break;
             case "portrait" : 
                 let portrait = d.querySelector("#" + key);
+                let lookup = d.querySelector("#imageHandler");
                 portrait.innerHTML = "";
+                lookup.innerHTML = "";
                 if (value !== undefined && value != "" ) {
                     let buf = document.createElement("img");
                     buf.alt = "Portret postaci";
                     buf.src = value;
-                    portrait.append(buf);
+                    portrait.append(buf.cloneNode());
+                    lookup.append(buf);
                 }
                 break;
             default :
@@ -232,11 +259,26 @@ function switchViewEq(target) {
 
 function skillHandler (e) {
     let skill = e.target;
-    let checker = skill.lastChild.style.display;
-    if (checker == "none") skill.lastChild.style.display = "initial";
-    else skill.lastChild.style.display = "none";
+    skill.classList.toggle("active");
+    // let checker = skill.lastChild.style.display;
+    // if (checker == "none") skill.lastChild.style.display = "initial";
+    // else skill.lastChild.style.display = "none";
+}
+
+function imageEnlarger (e) {
+    let image = document.querySelector("#imageHandler");
+    if (imageState == 0) {
+        image.style.display = "flex";
+        imageState = 1;
+    }
+    else {
+        image.style.display = "none";
+        imageState = 0;
+    }
 }
 
 window.onload = function () {
     document.querySelector("#charIDSubmit").addEventListener("click", charGrabber);
+    document.querySelector("#imageHandler").addEventListener("click", imageEnlarger);
+    document.querySelector("#portrait").addEventListener("click", imageEnlarger);
 }
