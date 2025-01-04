@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<title>Rock da Paper Scissorz</title>
+		<link rel="stylesheet" href="/funstuff/RPS/style.css">
+		<script src="/funstuff/RPS/scripts.js" defer></script>
+	</head>
+	<body>
+		<main>
+			<div id="resultScreen" class="disabled">
+				<p id="gameLost" class="resultText disabled">Porażka!</p>
+				<p id="gameDraw" class="resultText disabled">Remis!</p>
+				<p id="gameWon" class="resultText disabled">Wygrana!</p>
+				<div id="records">
+					<p>Suma wygranych: <span id="totalGamesWon">0</span></p>
+					<p>Suma remisów: <span id="totalGamesDrew">0</span></p>
+					<p>Suma przegranych: <span id="totalGamesLost">0</span></p>
+				</div>
+				<button id="resetButton">Jeszcze raz?</button>
+			</div>
+			<div id="topBar">
+				<p>Gracz: <span id="scorePlayer">0</span></p>
+				<p>Runda <span id="roundNumber">1</span></p>
+				<p>Komputer: <span id="scorePC">0</span></p>
+			</div>
+			<div id="leftSide">
+				<img src="">
+			</div>
+			<div id="center">
+				<button id="rock">Kamień</button>
+				<button id="paper">Papier</button>
+				<button id="scissors">Nożyce</button>
+			</div>
+			<div id="rightSide">
+				<img src="">
+			</div>
+			<div id="bottomBar">
+				<p>Łącznie wygranych: <span id="totalScore">0</span></p>
+				<p>SVG pobrane z serwisu <a href="https://www.svgrepo.com">SVG Repo</a></p>
+				<div id="style">
+					<p>Obecny styl: </p>
+					<select>
+						<option value="cartoon" default>Cartoon</option>
+						<option value="oldie" default>Old</option>
+					</select>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

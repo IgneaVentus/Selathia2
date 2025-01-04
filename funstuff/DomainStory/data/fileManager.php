@@ -137,7 +137,7 @@
 			}
 			$buf->title = $_POST["title"];
 			$buf->url = $_POST["url"];
-			$buf->content = $_POST["content"];
+			$buf->content = htmlspecialchars($_POST["content"]);
 			if ($update) $succ = $buf->update();
 			else  $succ = $buf->create($_POST["password"]);
 			if ($succ) {

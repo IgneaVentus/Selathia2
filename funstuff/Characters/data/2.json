@@ -8,8 +8,8 @@
     "height": "157",
     "belief": "Lolth",
     "visage": {
-        "type": "",
-        "content": "",
+        "type": "img",
+        "content": "https://i.pinimg.com/474x/eb/20/54/eb20547838fc91150e4501051a4a2716--rogues-scifi.jpg",
         "txt": "Lean and well built, with black hair and ice cold, soul piercing blue eyes, this girl looks like walking razor wire. She has well defined, even sharp face bones and always seems at least a little pissed off"
     },
     "psyche": "Quite cheerful and enthusiastic about life, hates herpes",
@@ -60,6 +60,7 @@
         }
     },
     "attributes": {
+        "Maxlvl": 10,
         "Siła": 4,
         "Wytrzymałość": 3,
         "Kondycja": 7,

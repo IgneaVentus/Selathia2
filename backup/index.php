@@ -2,8 +2,11 @@
 	namespace App;
 
 	// Loading models and controllers
-	// require "./controllers";
-	// require "./models";
+	require "./controllers/crud.php";
+	require "./controllers/home.php";
+	require "./models/iModel.php";
+	require "./models/maintenance.php";
+	require "./models/Universe.php";
 
 	// Routing section
 	$request_uri = explode("?", $_SERVER["REQUEST_URI"], 2);
@@ -41,11 +44,11 @@
 				case "Eighties":
 					require "./funstuff/eighties.html";
 					break;
+				case "Dad":
+					require "./funstuff/dad.html";
+					break;
 				case "adRespect":
 					require "./funstuff/adRespect/index.html";
-					break;
-				case "RPS":
-					require "./funstuff/RPS/index.html";
 					break;
 				default:
 					require "./funstuff/home.html";
@@ -55,26 +58,26 @@
 		case "Special":
 			require "./funstuff/infu.html";
 			break;
-		// case "Serverside":
-		// 	echo "Got ere' ".$request_tree[1];
-		// 	if ($request_tree[1]=="Initialize") {
-		// 		Models\initialize();
-		// 	}
-		// 	break;
+		case "Serverside":
+			echo "Got ere' ".$request_tree[1];
+			if ($request_tree[1]=="Initialize") {
+				Models\initialize();
+			}
+			break;
 		case "api":
 			switch ($request_tree[1]) {
-				// case "CRUD":
-				// 	Controllers\CRUD\requestManager($request_method);
-				// 	break;
+				case "CRUD":
+					Controllers\CRUD\requestManager($request_method);
+					break;
 				case "Home":
 				case "":
 					Controllers\Home\requestManager($request_method);
 					break;
 			}
 			break;
-		// case "CRUD":
-		// 	return Controllers\CRUD\initialize();
-		// 	break;
+		case "CRUD":
+			return Controllers\CRUD\initialize();
+			break;
 		case "Home":
 		case "":
 			return Controllers\Home\initialize();
