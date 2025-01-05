@@ -34,14 +34,14 @@ class Character {
         this.#desc["visage"] = dataset.visage;
         this.#desc["psyche"] = dataset.psyche;
         this.#dataTable.set("charDesc > #innerDesc", this.#desc["visage"].txt  + "\n\n" + this.#desc["psyche"]);
-        this.#dataTable.set("portrait", this.#desc["visage"].content);
-        this.#desc["backstory"] = dataset.backstory;
-        this.#dataTable.set("charStory", this.#desc["backstory"]);
+        // Check whether character has a portait - if not, set portrait to 0 for further processing
+        this.#dataTable.set("portrait", this.#desc["visage"].type == "img" ? this.#desc["visage"].content : 0);
 
         //running support functions
         this.#itemRepeater(dataset.equipment);
         this.#skillRepeater(dataset.skillset);
         this.#attrRepeater(dataset.attributes);
+        this.#backstoryRepeater(dataset.backstory);
     }
 
     #itemRepeater (obj) {
@@ -82,6 +82,22 @@ class Character {
             }
         }
         this.#dataTable.set("charAttr", this.#attributes);
+    }
+
+    #backstoryRepeater (obj) {
+        this.#desc["backstory"] = "";
+        //Loading the backstory line by line for multiline stories
+        if ((obj[0]).length > 1) {
+            for (let line in obj) {
+                if (obj[line]!==undefined) {
+                    this.#desc["backstory"] += obj[line] + "\n\n";
+                }
+            }
+        }
+        // Loading whole backstory at once for backward compatibility
+        // DEPRECATE later
+        else this.#desc["backstory"] = obj;
+        this.#dataTable.set("charStory", this.#desc["backstory"]);
     }
 
     name() {
@@ -158,17 +174,21 @@ class Character {
                 }
                 break;
             case "portrait" : 
-                let portrait = d.querySelector("#" + key);
-                let lookup = d.querySelector("#imageHandler");
-                portrait.innerHTML = "";
-                lookup.innerHTML = "";
-                if (value !== undefined && value != "" ) {
-                    let buf = document.createElement("img");
-                    buf.alt = "Portret postaci";
-                    buf.src = value;
-                    portrait.append(buf.cloneNode());
-                    lookup.append(buf);
+                if (value != 0) {
+                    let portrait = d.querySelector("#" + key);
+                    let lookup = d.querySelector("#imageHandler");
+                    portrait.innerHTML = "";
+                    lookup.innerHTML = "";
+                    if (value !== undefined && value != "" ) {
+                        let buf = document.createElement("img");
+                        buf.alt = "Portret postaci";
+                        buf.src = value;
+                        portrait.append(buf.cloneNode());
+                        lookup.append(buf);
+                    }
+                    portraitSwitcher(true);
                 }
+                else portraitSwitcher(false);
                 break;
             default :
                 d.querySelector("#" + key).innerText = value;
@@ -196,6 +216,7 @@ async function charGrabber () {
     }
 }
 
+// Updating character names in navbar and current character tracker in this script
 function charNavUpdate () {
     let navChar = [
         document.querySelector("#charPrev"),
@@ -203,13 +224,14 @@ function charNavUpdate () {
         document.querySelector("#charNext")
     ]
     let IDs = [ (currentChar-1 < 0 ? maxChar-1 : currentChar-1), currentChar, (currentChar+1 >= maxChar ? 0 : currentChar+1)];
-    console.log(IDs);
-    console.log(charList);
+    // console.log(IDs);
+    // console.log(charList);
     navChar[0].innerText = charList[charNav[IDs[0]]].name();
     navChar[2].innerText = charList[charNav[IDs[2]]].name();
     navChar[1].innerText = charList[charNav[IDs[1]]].name();
 }
 
+// Detecting user changing characters via UI
 function charChange(direction) {
     if (direction == "next") {
         if (++currentChar>maxChar-1) currentChar=0
@@ -265,6 +287,11 @@ function skillHandler (e) {
     // else skill.lastChild.style.display = "none";
 }
 
+function portraitSwitcher ( state ) {
+    let isDisplayed = !document.querySelector("main").classList.contains("noPortrait");
+    if (state != isDisplayed) document.querySelector("main").classList.toggle("noPortrait");
+}
+
 function imageEnlarger (e) {
     let image = document.querySelector("#imageHandler");
     if (imageState == 0) {
@@ -277,8 +304,22 @@ function imageEnlarger (e) {
     }
 }
 
-window.onload = function () {
+window.addEventListener("load", (e) => {
     document.querySelector("#charIDSubmit").addEventListener("click", charGrabber);
     document.querySelector("#imageHandler").addEventListener("click", imageEnlarger);
     document.querySelector("#portrait").addEventListener("click", imageEnlarger);
-}
+    // Allow to preload characters with "load" GET parameter containing ID number
+    let params = new URLSearchParams(location.search);
+    if (params.size > 0) {
+        let id = params.get("load");
+        if (id != "" && id !== undefined) {
+            document.querySelector("#charID").value = id;
+            charGrabber();
+        }
+        history.pushState({"preloadID": id}, "", (document.location.href).split("?")[0]);
+    }
+});
+// window.onload = function () {
+    
+//     }
+// }

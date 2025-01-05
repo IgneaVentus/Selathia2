@@ -120,6 +120,16 @@ main {
     height: 75vh;
 }
 
+main.noPortrait {
+    grid-template: 
+    "age name name name "
+    "attr desc desc desc"
+    "attr eqbutt eqbutt eqbutt"
+    "attr eq eq eq";
+    grid-template-columns: 25% 24% 24% 24%;
+    grid-template-rows: 10% 38% 10% 38%;
+}
+
 main > * {
     background-color: var(--mainBase);
     -webkit-backdrop-filter: blur(5px);
