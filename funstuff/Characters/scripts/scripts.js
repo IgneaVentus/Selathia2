@@ -1,5 +1,11 @@
 const charList = new Array();
 const charNav = new Array();
+const navChar = [
+    document.querySelector("#charPrev"),
+    document.querySelector("#charCur"),
+    document.querySelector("#charNext")
+]
+var favlist;
 let currentChar = -1
 let maxChar = 0
 let imageState = 0
@@ -199,6 +205,188 @@ class Character {
     }
 }
 
+class Favlist {
+    #favorites = [];
+    #lastVisited = [];
+    #lastVisitedLimit = 10;
+    navigation = document.getElementById("favlistNavButtons");
+    view = document.getElementById("favlistView");
+    favButton = document.getElementById("favlistFuncButtons");
+    #currentview = "favorites";
+
+    constructor () {
+        // Load saved data to fill the list
+        let cookiedata = document.cookie;
+        cookiedata = cookiedata.split(";");
+        cookiedata.forEach(cookie => {
+            if (cookie.includes("favorites")) this.#cookieReader("favorites", cookie);
+            if (cookie.includes("lastVisited"))  this.#cookieReader("lastVisited", cookie);
+        });
+    }
+
+    listUpdate() {
+        this.view.innerHTML = "";
+        switch(this.#currentview) {
+            case "favorites": this.#favorites.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], true); }); break;
+            case "lastVisited": this.#lastVisited.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], false); }); break;
+        }
+    }
+
+    viewChange (e) {
+        let view = e.target.getAttribute("value");
+        if (view != this.#currentview) {
+            if (view == "favorites") {
+                this.#currentview = view;
+                this.listUpdate();
+                this.#changeActiveNav();
+            }
+            if (view == "lastVisited") {
+                this.#currentview = view;
+                this.listUpdate();
+                this.#changeActiveNav();
+            }
+        }
+    }
+
+    addLastVisited (id, name) {
+        let leftover = null;
+        
+        // Check whether we do not have that record already
+        let alreadyHere = -1;
+        if (this.#lastVisited.length > 1) { 
+            for (let i=0; i<this.#lastVisited.length; i++) { 
+                if (this.#lastVisited[i][0] == id) alreadyHere = i; 
+            }
+        }
+        if (alreadyHere != -1) {
+            this.#lastVisited.splice(alreadyHere, 1);
+            this.#lastVisited.unshift([id, name]);
+        }
+        else if (this.#lastVisited.unshift([id, name]) > this.#lastVisitedLimit ) leftover = this.#lastVisited.pop();
+        
+        this.#cookieSaver("lastVisited");
+        if (this.#currentview == "lastViewed") this.listUpdate();
+    }
+
+    addFavorite (e) {
+        // Get data
+        let id, name;
+        id = charNav[currentChar];
+        name = charList[id].name();
+        
+        // Check whether we do not have that record already
+        let alreadyHere = -1;
+        if (this.#favorites.length > 1) { 
+            for (let i=0; i<this.#favorites.length; i++) { 
+                if (this.#favorites[i][0] == id) alreadyHere = i; 
+            }
+        }
+
+        // If it doesn't exist, add it. If it does, ignore.
+        if (alreadyHere == -1) {
+            this.#favorites.unshift([id, name]);
+            this.#cookieSaver("favorites");
+            this.listUpdate();
+        }
+    }
+
+    // If the character is already loaded, switch to it. Else load it.
+    loadDemanded (e) {
+        let id = e.target.getAttribute("value");
+
+        if (charNav.includes(id)) {
+            charChange(charNav.indexOf(id))
+        }
+        else {
+            document.querySelector("#charID").value = id.trim();
+            charGrabber();
+        }
+    }
+
+    removeFavorite (e) {
+        let id = e.target.getAttribute("value");
+
+        // Check whether we do not have that record already
+        let alreadyHere = -1;
+        if (this.#favorites.length > 0) { 
+            for (let i=0; i<this.#favorites.length; i++) { 
+                if (this.#favorites[i][0] == id) alreadyHere = i; 
+            }
+        }
+
+        if (alreadyHere != -1) {
+            this.#favorites.splice(alreadyHere, 1);
+            this.#cookieSaver("favorites");
+            this.listUpdate();
+        }
+    }
+
+    #changeActiveNav () {
+        for (let button of this.navigation.children) {
+            button.classList.toggle("active");
+        }
+        this.favButton.classList.toggle("disabled");
+    }
+
+    #cookieReader (target, cookie) {
+        let buffer = cookie.replace(target+"=", "").split(",");
+        buffer.forEach((record) => {
+            let data = record.split("|");
+            if (target=="favorites") this.#favorites[data[2]] = [data[0],data[1]];
+            else if (target=="lastVisited") this.#lastVisited[data[2]] = [data[0],data[1]];
+        })
+    }
+
+    #cookieSaver (target) {
+        // Create expiration date string to append to cookie. By default expires after a year (365 days)
+        let date = new Date();
+        let dateAppend = "; expires=" + date.toUTCString( date.setTime( date.getTime() + ( 365*24*60*60*1000 ) ) );
+        
+        let cookie = "";
+        if (target == "favorites") {
+            cookie = "favorites=";
+            for (let i=0; i<this.#favorites.length; i++) {
+                cookie += `${this.#favorites[i][0]}|${this.#favorites[i][1]}|${i}`;
+                if (i!=this.#favorites.length-1) cookie+=",";
+            }
+            console.log(cookie);
+        }
+        else if (target == "lastVisited") {
+            cookie = "lastVisited=";
+            for (let i=0; i<this.#lastVisited.length; i++) {
+                cookie += `${this.#lastVisited[i][0]}|${this.#lastVisited[i][1]}|${i}`;
+                if (i!=this.#lastVisited.length-1) cookie+=",";
+            }
+        }
+        else return 0;
+        cookie += dateAppend;
+        document.cookie = cookie;
+    }
+
+    #listItemGenerator (id, name, deleteButton) {
+        let item = document.createElement("div");
+        item.classList.add("favlistViewItem");
+
+        let buf = document.createElement("button");
+        buf.setAttribute("value", id);
+        buf.classList.add("load");
+        buf.innerText = name;
+        buf.addEventListener("click", favlist.loadDemanded.bind(favlist));
+        item.appendChild(buf);
+
+        if (deleteButton) { 
+            buf = document.createElement("button");
+            buf.setAttribute("value", id);
+            buf.classList.add("delete");
+            buf.innerText = "Usuń";
+            buf.addEventListener("click", favlist.removeFavorite.bind(favlist));
+            item.appendChild(buf);
+        }
+
+        this.view.appendChild(item);
+    }
+}
+
 async function charGrabber () {
     let id = document.querySelector("#charID").value;
     if (id !== undefined) {
@@ -209,8 +397,10 @@ async function charGrabber () {
                 charList[id] = new Character(data);
                 charNav.push(id);
                 maxChar++;
-                if (currentChar == -1) charChange("next");
+                charChange("next");
                 charNavUpdate();
+                // Add to the list of last visited
+                favlist.addLastVisited(id, data.name + " " + data.surname);
             })
         }
     }
@@ -218,11 +408,6 @@ async function charGrabber () {
 
 // Updating character names in navbar and current character tracker in this script
 function charNavUpdate () {
-    let navChar = [
-        document.querySelector("#charPrev"),
-        document.querySelector("#charCur"),
-        document.querySelector("#charNext")
-    ]
     let IDs = [ (currentChar-1 < 0 ? maxChar-1 : currentChar-1), currentChar, (currentChar+1 >= maxChar ? 0 : currentChar+1)];
     // console.log(IDs);
     // console.log(charList);
@@ -239,6 +424,8 @@ function charChange(direction) {
     else if (direction == "prev") {
         if (--currentChar<0) currentChar=maxChar-1
     }
+    // Load direct id
+    else currentChar = direction;
 
     charList[charNav[currentChar]].present();
     charNavUpdate();
@@ -318,8 +505,10 @@ window.addEventListener("load", (e) => {
         }
         history.pushState({"preloadID": id}, "", (document.location.href).split("?")[0]);
     }
+    favlist = new Favlist();
+    for (const button of favlist.navigation.children) {
+        button.addEventListener("click", favlist.viewChange.bind(favlist))
+    }
+    favlist.favButton.children[0].addEventListener("click", favlist.addFavorite.bind(favlist));
+    favlist.listUpdate();
 });
-// window.onload = function () {
-    
-//     }
-// }
