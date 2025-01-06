@@ -250,6 +250,7 @@ class Favlist {
 
     addLastVisited (id, name) {
         let leftover = null;
+        id = id.trim();
         
         // Check whether we do not have that record already
         let alreadyHere = -1;
@@ -271,7 +272,7 @@ class Favlist {
     addFavorite (e) {
         // Get data
         let id, name;
-        id = charNav[currentChar];
+        id = charNav[currentChar].trim();
         name = charList[id].name();
         
         // Check whether we do not have that record already
@@ -292,19 +293,19 @@ class Favlist {
 
     // If the character is already loaded, switch to it. Else load it.
     loadDemanded (e) {
-        let id = e.target.getAttribute("value");
+        let id = e.target.getAttribute("value").trim();
 
         if (charNav.includes(id)) {
             charChange(charNav.indexOf(id))
         }
         else {
-            document.querySelector("#charID").value = id.trim();
+            document.querySelector("#charID").value = id;
             charGrabber();
         }
     }
 
     removeFavorite (e) {
-        let id = e.target.getAttribute("value");
+        let id = e.target.getAttribute("value").trim();
 
         // Check whether we do not have that record already
         let alreadyHere = -1;
@@ -364,6 +365,7 @@ class Favlist {
     }
 
     #listItemGenerator (id, name, deleteButton) {
+        id = id.trim();
         let item = document.createElement("div");
         item.classList.add("favlistViewItem");
 
@@ -388,7 +390,7 @@ class Favlist {
 }
 
 async function charGrabber () {
-    let id = document.querySelector("#charID").value;
+    let id = document.querySelector("#charID").value.trim();
     if (id !== undefined) {
         if (!charNav.includes(id)) {
             fetch("/Misc/Characters/API?q="+id)
@@ -498,7 +500,7 @@ window.addEventListener("load", (e) => {
     // Allow to preload characters with "load" GET parameter containing ID number
     let params = new URLSearchParams(location.search);
     if (params.size > 0) {
-        let id = params.get("load");
+        let id = params.get("load").trim();
         if (id != "" && id !== undefined) {
             document.querySelector("#charID").value = id;
             charGrabber();
