@@ -227,8 +227,8 @@ class Favlist {
     listUpdate() {
         this.view.innerHTML = "";
         switch(this.#currentview) {
-            case "favorites": this.#favorites.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], true); }); break;
-            case "lastVisited": this.#lastVisited.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], false); }); break;
+            case "favorites": this.#favorites.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], true);  console.log(entry);}); break;
+            case "lastVisited": this.#lastVisited.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], false);  console.log(entry);}); break;
         }
     }
 
@@ -250,20 +250,19 @@ class Favlist {
 
     addLastVisited (id, name) {
         let leftover = null;
-        id = id.trim();
         
         // Check whether we do not have that record already
         let alreadyHere = -1;
         if (this.#lastVisited.length > 1) { 
             for (let i=0; i<this.#lastVisited.length; i++) { 
-                if (this.#lastVisited[i][0] == id) alreadyHere = i; 
+                if (this.#lastVisited[i][0].trim() == id.trim()) alreadyHere = i; 
             }
         }
         if (alreadyHere != -1) {
             this.#lastVisited.splice(alreadyHere, 1);
-            this.#lastVisited.unshift([id, name]);
+            this.#lastVisited.unshift([id.trim(), name]);
         }
-        else if (this.#lastVisited.unshift([id, name]) > this.#lastVisitedLimit ) leftover = this.#lastVisited.pop();
+        else if (this.#lastVisited.unshift([id.trim(), name]) > this.#lastVisitedLimit ) leftover = this.#lastVisited.pop();
         
         this.#cookieSaver("lastVisited");
         if (this.#currentview == "lastViewed") this.listUpdate();
@@ -279,7 +278,7 @@ class Favlist {
         let alreadyHere = -1;
         if (this.#favorites.length > 1) { 
             for (let i=0; i<this.#favorites.length; i++) { 
-                if (this.#favorites[i][0] == id) alreadyHere = i; 
+                if (this.#favorites[i][0].trim() == id.trim()) alreadyHere = i; 
             }
         }
 
@@ -370,10 +369,15 @@ class Favlist {
         item.classList.add("favlistViewItem");
 
         let buf = document.createElement("button");
+        console.log(id);
         buf.setAttribute("value", id);
+        console.log(buf);
         buf.classList.add("load");
+        console.log(buf);
         buf.innerText = name;
+        console.log(buf);
         buf.addEventListener("click", favlist.loadDemanded.bind(favlist));
+        console.log(buf);
         item.appendChild(buf);
 
         if (deleteButton) { 
