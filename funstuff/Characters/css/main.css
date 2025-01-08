@@ -29,7 +29,7 @@ body {
     height: 100vh;
     background: linear-gradient(black, var(--gradientBase), black) no-repeat center;
     background-size: cover;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: silver;
     display: flex;
     flex-flow: column nowrap;
@@ -41,12 +41,12 @@ body {
 nav {
     display: flex;
     flex-flow: row wrap;
-    height: fit-content;
     width: 100vw;
-    height: 2rem;
+    min-height: 2rem;
+    height: 4vh;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: inherit;
 }
 
 nav > a {
@@ -60,7 +60,11 @@ nav > a {
     font-weight: bold;
     box-sizing: border-box;
     color: silver;
+    aspect-ratio: 1 / 1;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #navPrev {
@@ -73,13 +77,13 @@ nav > a {
 
 #navName {
     display: flex;
-    flex-flow: row nowwrap;
+    flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
     width: 70%;
     height: 100%;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 120%;
     background: linear-gradient(to right, #00000000, var(--mainBase), var(--gradientBase), var(--mainBase), #00000000) center no-repeat;
 }
 
@@ -88,11 +92,6 @@ nav > a {
     padding: 0px 5%;
     width: 32%;
     text-align: center;
-}
-
-#navName > #charCur {
-    font-size: inherit;
-    font-weight: inherit;
 }
 
 #navName > :is(#charPrev, #charNext) {
@@ -170,7 +169,7 @@ main > * {
     grid-area: eqbutt;
 }
 
-#charButtons, #charEquipmentButtons {
+#charButtons, #charEquipmentButtons, #favlistNavButtons, #favlistFuncButtons {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -183,7 +182,7 @@ main > * {
     background: none;
     color: silver;
     border: none;
-    font-size: 1.3rem;
+    font-size: inherit;
     width: 100%;
     box-sizing: border-box;
     border-right: 1px silver solid;
@@ -252,7 +251,7 @@ main > * {
     align-items: center;
     justify-content: center;
     font-weight: bolder;
-    font-size: 1.5rem;
+    font-size: 120%;
     overflow: hidden;
 }
 
@@ -264,12 +263,12 @@ main > * {
 :is(#charWeap, #charArmor, #charCloth, #charItems) > p {
     padding: 0.25rem;
     margin: 0px;
-    width: 50%;
-    border-right: 1px silver solid;
+    flex-basis: 50%;
+    border-left: 1px silver solid;
     box-sizing: border-box;
 }
 
-:is(#charWeap, #charArmor, #charCloth, #charItems) > p:nth-child(even) {
+:is(#charWeap, #charArmor, #charCloth, #charItems) > p:nth-child(odd) {
     border: none;
 }
 
@@ -364,24 +363,30 @@ main > * {
 #lookup {
     display: flex;
     width: 100%;
-    height: 1.5rem;
+    min-height: 2rem;
+    height: 4vh;
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
+    font-size: inherit;
 }
 
 #lookup > input {
     border: none;
     height: 100%;
+    min-width: 100px;
+    width: 20%;
     border-radius: 20px 0px 0px 20px;
     margin: 0px;
     text-align: right;
+    font-size: inherit;
 }
 
 .sideButton {
     background-color: var(--navColorB);
     height: 100%;
-    width: fit-content;
+    min-width: fit-content;
+    width: 10%;
     border-radius: 0px 20px 20px 0px;
     color: silver;
     padding: 5px;
@@ -389,6 +394,7 @@ main > * {
     margin: 0px;
     border: 1px solid silver;
     text-align: center;
+    font-size: inherit;
 }
 
 #imageHandler {
@@ -409,4 +415,130 @@ main > * {
 #imageHandler > img {
     max-height: 90%;
     max-width: 90%;
+}
+
+#favlist {
+    position: absolute;
+    /* display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center; */
+
+    display: grid;
+    grid-template: 
+    "view nav"
+    "bottom nav";
+    grid-template-columns: auto 2rem;
+    grid-template-rows: auto 10%;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    padding: 0.5rem;
+
+    height: 75vh;
+    width: 400px;
+    left: calc(3rem - 400px);
+    top: 12vh;
+    background-color: var(--mainBase);
+    border: 1px solid silver;
+    border-right: 4px double silver;
+    border-radius: 0px 5px 5px 0px;
+    transition: left 1s;
+}
+
+#favlist:hover {
+    left: 0px;
+}
+
+#favlistNavButtons {
+    grid-area: nav;
+    display: flex;
+    flex-flow: column-reverse nowrap;
+    justify-content: space-around;
+}
+
+#favlistNavButtons button {
+    transform: rotate(270deg);
+    width: 37vh;
+}
+
+#favlistFuncButtons {
+    grid-area: bottom;
+}
+
+#favlistNavButtons, #favlistFuncButtons {
+    height: 100%;
+    width: 100%;
+}
+
+#favlistView {
+    grid-area: view;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: hidden;
+}
+
+#favlistView button {
+    background: none;
+    color: silver;
+    border: none;
+    font-size: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px 1rem;
+}
+
+#favlistView .favlistViewItem button:nth-child(2) {
+    width: fit-content;
+    border-left: 1px solid silver;
+}
+
+#favlistView .favlistViewItem {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#favlistView .row .connect:nth-child(2) {
+    width: 60%;
+}
+
+@media only screen and (min-width: 2560px) {
+    body {
+        font-size: 2rem;
+    }
+
+    /* :is(#charWeap, #charArmor, #charCloth, #charItems) > p {
+        flex-basis: 33%;
+    }
+
+    :is(#charWeap, #charArmor, #charCloth, #charItems) > p:nth-child(odd) {
+        border: initial;
+    }
+
+
+    :is(#charWeap, #charArmor, #charCloth, #charItems) > p:nth-child(3) {
+        border: none;
+    } */
+
+    .connect {
+        font-size: 120%;
+    }
+
+    .favlist {
+        gap: 1rem;
+        padding: 1rem;
+        left: calc(4rem - 400px);
+    }
+}
+
+/* OVERRIDES */
+
+.disabled {
+    display: none !important;
 }

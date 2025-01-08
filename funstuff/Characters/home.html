@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/funstuff/Characters/css/main.css">
-        <title>Suck my pinkie</title>
+        <title>Katalog Postaci</title>
         <script src="/funstuff/Characters/scripts/scripts.js" defer></script>
     </head>
     <body>
@@ -56,6 +56,29 @@
         <div id="lookup">
             <input type="number" name="charID" id="charID" placeholder="ID postaci">
             <button type="submit" class="sideButton" id="charIDSubmit">Załaduj!</button>
+        </div>
+        <div id="favlist">
+            <div id="favlistNavButtons">
+                <button value="favorites" class="connect left active">Ulubione</button>
+                <button value="lastVisited" class="connect right">Ostatnie</button>
+            </div>
+            <div id="favlistView">
+                <div class="favlistViewItem">
+                    <button class="" value="501">Maćko</button>
+                    <button class=" right">Usuń</button>
+                </div>
+                <div class="favlistViewItem">
+                    <button class="" value="721">Nellie</button>
+                    <button class=" ">Usuń</button>
+                </div>
+                <div class="favlistViewItem">
+                    <button class="" value="341">Maria Niskomiejska</button>
+                    <button class=" " value="341">Usuń</button>
+                </div>
+            </div>
+            <div id="favlistFuncButtons">
+                <button id="favlistAddFavorite" class="connect right">Dodaj obecną do ulubionych!</button>
+            </div>
         </div>
         <div id="imageHandler">
             
