@@ -1,43 +1,3 @@
-:root {
-    --gradientBase: #770059;
-    --navColorA: #ff33ccaa;
-    --navColorB: #770059cc;
-    --mainBase: #360029a1;
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: none;
-}
-
-::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(transparent, var(--navColorB), transparent);
-    cursor: grab;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-image: linear-gradient(transparent, var(--navColorA), transparent);
-}
-
-body {
-    margin: 0px;
-    padding: 0px;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(black, var(--gradientBase), black) no-repeat center;
-    background-size: cover;
-    font-size: 1.1rem;
-    color: silver;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    align-items: center;
-    overflow: hidden;
-}
-
 nav {
     display: flex;
     flex-flow: row wrap;
@@ -109,14 +69,6 @@ main {
     grid-template-columns: 25% 24% 24% 24%;
     grid-template-rows: 10% 38% 10% 38%;
     gap: 1%;
-    box-sizing: border-box;
-    padding: 1%;
-    position: absolute;
-    left: 50vw;
-    top: 50vh;
-    transform: translate(-50%, -50%);
-    width: 75vw;
-    height: 75vh;
 }
 
 main.noPortrait {
@@ -127,24 +79,6 @@ main.noPortrait {
     "attr eq eq eq";
     grid-template-columns: 25% 24% 24% 24%;
     grid-template-rows: 10% 38% 10% 38%;
-}
-
-main > * {
-    background-color: var(--mainBase);
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
-    border-radius: 5px;
-    border: 1px solid silver;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-wrap: normal;
-    box-sizing: border-box;
-    padding: 1%;
-}
-
-.hidden {
-    display: none !important;
 }
 
 #portrait {
@@ -169,32 +103,13 @@ main > * {
     grid-area: eqbutt;
 }
 
-#charButtons, #charEquipmentButtons, #favlistNavButtons, #favlistFuncButtons {
+#charButtons, #charEquipmentButtons, #favlistFuncButtons {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
-}
-
-.connect {
-    background: none;
-    color: silver;
-    border: none;
-    font-size: inherit;
-    width: 100%;
-    box-sizing: border-box;
-    border-right: 1px silver solid;
-    cursor: pointer;
-}
-
-.connect.right {
-    border: none;
-}
-
-.connect.active {
-    background-image: linear-gradient(to right, transparent, var(--navColorB), var(--navColorB), transparent);
 }
 
 #charDesc {
@@ -215,6 +130,7 @@ main > * {
 }
 
 #innerDesc {
+    width: 100%;
     flex: auto;
 }
 
@@ -382,7 +298,7 @@ main > * {
     font-size: inherit;
 }
 
-.sideButton {
+#charIDSubmit {
     background-color: var(--navColorB);
     height: 100%;
     min-width: fit-content;
@@ -418,59 +334,28 @@ main > * {
 }
 
 #favlist {
-    position: absolute;
-    /* display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    align-items: center; */
-
-    display: grid;
     grid-template: 
     "view nav"
     "bottom nav";
     grid-template-columns: auto 2rem;
     grid-template-rows: auto 10%;
-    gap: 0.5rem;
-    box-sizing: border-box;
-    padding: 0.5rem;
 
-    height: 75vh;
-    width: 400px;
-    left: calc(3rem - 400px);
-    top: 12vh;
-    background-color: var(--mainBase);
-    border: 1px solid silver;
-    border-right: 4px double silver;
-    border-radius: 0px 5px 5px 0px;
-    transition: left 1s;
-}
-
-#favlist:hover {
-    left: 0px;
 }
 
 #favlistNavButtons {
     grid-area: nav;
-    display: flex;
-    flex-flow: column-reverse nowrap;
-    justify-content: space-around;
-}
-
-#favlistNavButtons button {
-    transform: rotate(270deg);
-    width: 37vh;
 }
 
 #favlistFuncButtons {
     grid-area: bottom;
 }
 
-#favlistNavButtons, #favlistFuncButtons {
+#favlistFuncButtons {
     height: 100%;
     width: 100%;
 }
 
-#favlistView {
+#favlist .list {
     grid-area: view;
     width: 100%;
     height: 100%;
@@ -479,7 +364,7 @@ main > * {
     overflow: hidden;
 }
 
-#favlistView button {
+#favlist .list button {
     background: none;
     color: silver;
     border: none;
@@ -492,53 +377,18 @@ main > * {
     padding: 0px 1rem;
 }
 
-#favlistView .favlistViewItem button:nth-child(2) {
+#favlist .list .favlistViewItem button:nth-child(2) {
     width: fit-content;
     border-left: 1px solid silver;
 }
 
-#favlistView .favlistViewItem {
+#favlist .list .favlistViewItem {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
 }
 
-#favlistView .row .connect:nth-child(2) {
+#favlist .list .row .connect:nth-child(2) {
     width: 60%;
-}
-
-@media only screen and (min-width: 2560px) {
-    body {
-        font-size: 2rem;
-    }
-
-    /* :is(#charWeap, #charArmor, #charCloth, #charItems) > p {
-        flex-basis: 33%;
-    }
-
-    :is(#charWeap, #charArmor, #charCloth, #charItems) > p:nth-child(odd) {
-        border: initial;
-    }
-
-
-    :is(#charWeap, #charArmor, #charCloth, #charItems) > p:nth-child(3) {
-        border: none;
-    } */
-
-    .connect {
-        font-size: 120%;
-    }
-
-    .favlist {
-        gap: 1rem;
-        padding: 1rem;
-        left: calc(4rem - 400px);
-    }
-}
-
-/* OVERRIDES */
-
-.disabled {
-    display: none !important;
 }

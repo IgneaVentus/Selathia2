@@ -3,9 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/funstuff/Characters/css/themeSettings.css">
         <link rel="stylesheet" href="/funstuff/Characters/css/main.css">
         <title>Katalog Postaci</title>
         <script src="/funstuff/Characters/scripts/scripts.js" defer></script>
+        <script src="/funstuff/Characters/scripts/user.js"></script>
     </head>
     <body>
         <nav>
@@ -55,29 +57,45 @@
         </main>
         <div id="lookup">
             <input type="number" name="charID" id="charID" placeholder="ID postaci">
-            <button type="submit" class="sideButton" id="charIDSubmit">Załaduj!</button>
+            <button type="submit" id="charIDSubmit">Załaduj!</button>
         </div>
-        <div id="favlist">
-            <div id="favlistNavButtons">
+        <div id="favlist" class="sidePanel left">
+            <div id="favlistNavButtons" class="nav">
                 <button value="favorites" class="connect left active">Ulubione</button>
                 <button value="lastVisited" class="connect right">Ostatnie</button>
             </div>
-            <div id="favlistView">
-                <div class="favlistViewItem">
-                    <button class="" value="501">Maćko</button>
-                    <button class=" right">Usuń</button>
-                </div>
-                <div class="favlistViewItem">
-                    <button class="" value="721">Nellie</button>
-                    <button class=" ">Usuń</button>
-                </div>
-                <div class="favlistViewItem">
-                    <button class="" value="341">Maria Niskomiejska</button>
-                    <button class=" " value="341">Usuń</button>
+            <div id="favlistView" class="list">
+                <div id="favlistCharacters">
                 </div>
             </div>
-            <div id="favlistFuncButtons">
-                <button id="favlistAddFavorite" class="connect right">Dodaj obecną do ulubionych!</button>
+            <div id="lastVisitedView" class="list hidden">
+                <div id="lastVisitedCharacters"></div>
+            </div>
+            <button id="favlistAddFavorite" class="navButton">Dodaj obecną do ulubionych!</button>
+        </div>
+        <div id="userPanel" class="sidePanel right">
+            <div id="userPanelTag" class="nav">
+                <button class="connect right active">Panel użytkownika</button>
+            </div>
+            <div id="userPanelHeader">
+                <div id="userLoginModule">
+                    <fieldset>
+                        <legend>Logowanie</legend>
+                        <label>Login: <input type="text" id="userLoginInput"></label>
+                        <label>Hasło: <input type="password" id="userPasswordInput"></label>
+                        <button id="userLoginSubmit" class="connect right">Zaloguj!</button>
+                    </fieldset>
+                </div>
+                <div id="userInfoModule" class="row hidden">
+                    <h2 id="username"></h4>
+                </div>
+            </div>
+            <div id="userControlModule" class="column hidden">
+                <button class="navButton">Dodaj postać</button>
+                <button class="navButton">Włącz tryb edycji</button>
+                <button class="navButton hidden">Wyłącz tryb edycji</button>
+                <button class="navButton">Lista postaci</button>
+                <button class="navButton">Usuń postać</button>
             </div>
         </div>
         <div id="imageHandler">

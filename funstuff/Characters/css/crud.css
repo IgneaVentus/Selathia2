@@ -1,0 +1,25 @@
+main {
+    display: flex;
+    height: 90vh;
+}
+
+.row > * {
+    margin: 0px 0.5rem;
+    flex: 2 2 45%
+}
+
+textarea {
+    height: 4rem;
+}
+
+.connect:hover {
+    background-image: linear-gradient(to right, transparent, var(--navColorB), var(--navColorB), transparent);
+}
+/* Overrides for standard CSS */
+
+
+/* Keeping labels for screen readers - but hiding them for visual look */
+/* label {
+    position: absolute;
+    left: -1000px;
+} */
