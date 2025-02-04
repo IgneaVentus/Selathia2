@@ -11,8 +11,8 @@
 
 	class Home implements iController {
 		function initialize () {
-			require "./view/modules/head.html";
-			require "./view/modules/foot.html";
+			require "./Universes/view/modules/head.html";
+			require "./Universes/view/modules/foot.html";
 		}
 	
 		function requestHandler ($method) {
@@ -42,9 +42,9 @@
 
 
 	function initialize () {
-		require "./view/modules/head.html";
-		require "./view/crud.html";
-		require "./view/modules/foot.html";
+		require "./Universes/view/modules/head.html";
+		require "./Universes/view/crud.html";
+		require "./Universes/view/modules/foot.html";
 	}
 
 	function requestManager ($method) {

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/Modules/Characters/css/CharviewTheme.css">
+        <link rel="stylesheet" href="/Modules/Characters/css/CharviewForm.css">
+        <title>Kreator Postaci</title>
+    </head>
+    <body>
+		<main>
+			<form>
+				<fieldset name="nameSet">
+					<legend>Dane osobiste</legend>
+					<div class="row">
+						<label>Imię postaci:
+							<input type="text" placeholder="Imię postaci" name="charName" id="charName">
+						</label>
+						<label>Nazwisko postaci:
+							<input type="text" placeholder="Nazwisko postaci" name="charSurname" id="charSurname">
+						</label>
+					</div>
+					<div class="row">
+						<label for="charspecies">Gatunek postaci:
+							<input type="text" placeholder="Gatunek postaci" name="charspecies" id="charncharspeciesame">
+						</label>
+						<label for="charage">Wiek postaci:
+							<input type="number" min="14" placeholder="Wiek postaci" name="charAge" id="charAge">
+						</label>
+					</div>
+					<div class="row">
+						<label for="charsex">Płeć postaci:</label>
+						<select name="charSex" id="charSex">
+							<option value="" disabled selected>Wybierz płeć postaci</option>
+							<option value="male">Mężczyzna</option>
+							<option value="female">Kobieta</option>
+							<option value="nonbinary">Niebinarna</option>
+							<option value="nosex">Bezpłciowy</option>
+						</select>
+					</div>
+				</fieldset>
+				<fieldset name="characterSet">
+					<legend>Charakter postaci</legend>
+					<label for="charbelief">Wyznanie postaci:</label>
+					<input type="text" placeholder="Wyznanie postaci" name="charBelief" id="charBelief">
+					<label for="charcompass">Charakter postaci:</label>
+					<textarea form="charCreator" placeholder="Charakter lub kompas moralny postaci postaci" name="charcompass" id="charcompass"></textarea>
+				</fieldset>
+				<fieldset name="looksSet">
+					<legend>Wygląd postaci</legend>
+					<label for="charheight">Wzrost postaci:</label>
+					<input type="number" min="140" max="220" value="160" placeholder="Wzrost postaci (cm)" name="charHeight" id="charHeight">
+					<label for="chardesc">Opis wyglądu postaci:</label>
+					<textarea form="charCreator" name="charDesc" id="charDesc" placeholder="Opis wyglądu postaci"></textarea>
+				</fieldset>
+				<div class="row">
+					<button type="reset" class="connect">Zresetuj</button>
+					<button class="connect">Zapisz szkic</button>
+					<button type="submit" class="connect right">Wyślij</button>
+				</div>
+			</form>
+		</main>
+        <div id="userPanel" class="sidePanel right">
+            <div id="userPanelTag" class="nav">
+                <button class="connect right active">Panel użytkownika</button>
+            </div>
+            <div id="userPanelHeader">
+                <div id="userLoginModule">
+                    <fieldset>
+                        <legend>Logowanie</legend>
+                        <label>Login: <input type="text" id="userLoginInput"></label>
+                        <label>Hasło: <input type="password" id="userPasswordInput"></label>
+                        <button id="userLoginSubmit" class="connect right">Zaloguj!</button>
+                    </fieldset>
+                </div>
+                <div id="userInfoModule" class="row hidden">
+                    <h2 id="username"></h4>
+                </div>
+            </div>
+            <div id="userControlModule" class="column hidden">
+                <button class="navButton">Dodaj postać</button>
+                <button class="navButton">Włącz tryb edycji</button>
+                <button class="navButton hidden">Wyłącz tryb edycji</button>
+                <button class="navButton">Lista postaci</button>
+                <button class="navButton">Usuń postać</button>
+            </div>
+        </div>
+        <script src="/Modules/Characters/scripts/ThemeChanger.js" defer></script>
+    </body>
+</html>

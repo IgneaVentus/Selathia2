@@ -1,11 +1,12 @@
 const charList = new Array();
 const charNav = new Array();
-const navChar = [
-    document.querySelector("#charPrev"),
-    document.querySelector("#charCur"),
-    document.querySelector("#charNext")
-]
+const charNavNames = new Map ([
+    ["prev", document.querySelector("#charPrev")],
+    ["current", document.querySelector("#charCur")],
+    ["next", document.querySelector("#charNext")]
+])
 var favlist;
+var userPanel;
 let currentChar = -1
 let maxChar = 0
 let imageState = 0
@@ -41,7 +42,7 @@ class Character {
         this.#desc["psyche"] = dataset.psyche;
         this.#dataTable.set("charDesc > #innerDesc", this.#desc["visage"].txt  + "\n\n" + this.#desc["psyche"]);
         // Check whether character has a portait - if not, set portrait to 0 for further processing
-        this.#dataTable.set("portrait", this.#desc["visage"].type == "img" ? this.#desc["visage"].content : 0);
+        this.#dataTable.set("portrait", this.#desc["visage"].type == "img" ? "Modules/Characters/data/"+this.#desc["visage"].content : 0);
 
         //running support functions
         this.#itemRepeater(dataset.equipment);
@@ -210,8 +211,10 @@ class Favlist {
     #lastVisited = [];
     #lastVisitedLimit = 10;
     navigation = document.getElementById("favlistNavButtons");
-    view = document.getElementById("favlistView");
-    favButton = document.getElementById("favlistFuncButtons");
+    // view = document.getElementById("favlistView");
+    favCharacterList = document.getElementById("favlistView");
+    lastVisitedList = document.getElementById("lastVisitedView");
+    favButton = document.getElementById("favlistAddFavorite");
     #currentview = "favorites";
 
     constructor () {
@@ -222,13 +225,31 @@ class Favlist {
             if (cookie.includes("favorites")) this.#cookieReader("favorites", cookie);
             if (cookie.includes("lastVisited"))  this.#cookieReader("lastVisited", cookie);
         });
+        this.calculateItemCountLimit();
+    }
+
+    calculateItemCountLimit() {
+        let item = document.querySelector(".favlistViewItem");
+        if (item != null) {
+            item = item.getBoundingClientRect();
+            if (item !== null && item !== undefined) {
+                this.#lastVisitedLimit = Math.floor(this.lastVisitedList.children[0].getBoundingClientRect().height / item.height);
+                return 0;
+            }
+        }
+        this.#lastVisitedLimit = 10;
     }
 
     listUpdate() {
-        this.view.innerHTML = "";
         switch(this.#currentview) {
-            case "favorites": this.#favorites.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], true);  console.log(entry);}); break;
-            case "lastVisited": this.#lastVisited.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], false);  console.log(entry);}); break;
+            case "favorites": 
+                this.favCharacterList.children[0].innerHTML = "";
+                this.#favorites.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], true, "favorites");});
+                break;
+            case "lastVisited":
+                this.lastVisitedList.children[0].innerHTML = "";
+                this.#lastVisited.forEach( (entry) => { this.#listItemGenerator(entry[0], entry[1], false, "lastVisited");});
+                break;
         }
     }
 
@@ -253,7 +274,7 @@ class Favlist {
         
         // Check whether we do not have that record already
         let alreadyHere = -1;
-        if (this.#lastVisited.length > 1) { 
+        if (this.#lastVisited.length > 0) { 
             for (let i=0; i<this.#lastVisited.length; i++) { 
                 if (this.#lastVisited[i][0].trim() == id.trim()) alreadyHere = i; 
             }
@@ -276,7 +297,7 @@ class Favlist {
         
         // Check whether we do not have that record already
         let alreadyHere = -1;
-        if (this.#favorites.length > 1) { 
+        if (this.#favorites.length > 0) { 
             for (let i=0; i<this.#favorites.length; i++) { 
                 if (this.#favorites[i][0].trim() == id.trim()) alreadyHere = i; 
             }
@@ -310,7 +331,7 @@ class Favlist {
         let alreadyHere = -1;
         if (this.#favorites.length > 0) { 
             for (let i=0; i<this.#favorites.length; i++) { 
-                if (this.#favorites[i][0] == id) alreadyHere = i; 
+                if (this.#favorites[i][0].trim() == id.trim()) alreadyHere = i; 
             }
         }
 
@@ -325,7 +346,9 @@ class Favlist {
         for (let button of this.navigation.children) {
             button.classList.toggle("active");
         }
-        this.favButton.classList.toggle("disabled");
+        this.favCharacterList.classList.toggle("hidden");
+        this.lastVisitedList.classList.toggle("hidden");
+        this.favButton.classList.toggle("hidden");
     }
 
     #cookieReader (target, cookie) {
@@ -349,7 +372,6 @@ class Favlist {
                 cookie += `${this.#favorites[i][0]}|${this.#favorites[i][1]}|${i}`;
                 if (i!=this.#favorites.length-1) cookie+=",";
             }
-            console.log(cookie);
         }
         else if (target == "lastVisited") {
             cookie = "lastVisited=";
@@ -363,21 +385,16 @@ class Favlist {
         document.cookie = cookie;
     }
 
-    #listItemGenerator (id, name, deleteButton) {
+    #listItemGenerator (id, name, deleteButton, view) {
         id = id.trim();
         let item = document.createElement("div");
         item.classList.add("favlistViewItem");
 
         let buf = document.createElement("button");
-        console.log(id);
         buf.setAttribute("value", id);
-        console.log(buf);
         buf.classList.add("load");
-        console.log(buf);
         buf.innerText = name;
-        console.log(buf);
         buf.addEventListener("click", favlist.loadDemanded.bind(favlist));
-        console.log(buf);
         item.appendChild(buf);
 
         if (deleteButton) { 
@@ -389,24 +406,46 @@ class Favlist {
             item.appendChild(buf);
         }
 
-        this.view.appendChild(item);
+        switch (view) {
+            case "favorites": this.favCharacterList.children[0].appendChild(item); break;
+            case "lastVisited": this.lastVisitedList.children[0].appendChild(item); break;
+        }
+        
     }
+}
+
+class UserPanel {
+    #nickname; #isLoggedIn = false;
+    #userLoginModule = document.getElementById("userLoginModule");
+    #userInfoModule = document.getElementById("userInfoModule");
+    #userControlModule =  document.getElementById("userControlModule");
+
+    login (e) {
+        if (e.detail == "success") {
+            this.#userLoginModule.classList.add("hidden");
+            this.#userInfoModule.children[0].innerText = sessionStorage.getItem("loggedIn");
+            this.#userInfoModule.classList.remove("hidden");
+            this.#userControlModule.classList.remove("hidden");
+        }
+        else alert("Błędna nazwa użytkownika lub hasło!");
+    }
+
 }
 
 async function charGrabber () {
     let id = document.querySelector("#charID").value.trim();
     if (id !== undefined) {
         if (!charNav.includes(id)) {
-            fetch("/Misc/Characters/API?q="+id)
+            fetch("/Characters/API?q="+id)
             .then(data => data.json())
             .then(data => {
                 charList[id] = new Character(data);
                 charNav.push(id);
                 maxChar++;
                 charChange("next");
-                charNavUpdate();
                 // Add to the list of last visited
                 favlist.addLastVisited(id, data.name + " " + data.surname);
+                favlist.listUpdate();
             })
         }
     }
@@ -415,11 +454,9 @@ async function charGrabber () {
 // Updating character names in navbar and current character tracker in this script
 function charNavUpdate () {
     let IDs = [ (currentChar-1 < 0 ? maxChar-1 : currentChar-1), currentChar, (currentChar+1 >= maxChar ? 0 : currentChar+1)];
-    // console.log(IDs);
-    // console.log(charList);
-    navChar[0].innerText = charList[charNav[IDs[0]]].name();
-    navChar[2].innerText = charList[charNav[IDs[2]]].name();
-    navChar[1].innerText = charList[charNav[IDs[1]]].name();
+    charNavNames.get("prev").innerText = charList[charNav[IDs[0]]].name();
+    charNavNames.get("next").innerText = charList[charNav[IDs[2]]].name();
+    charNavNames.get("current").innerText = charList[charNav[IDs[1]]].name();
 }
 
 // Detecting user changing characters via UI
@@ -502,19 +539,22 @@ window.addEventListener("load", (e) => {
     document.querySelector("#imageHandler").addEventListener("click", imageEnlarger);
     document.querySelector("#portrait").addEventListener("click", imageEnlarger);
     // Allow to preload characters with "load" GET parameter containing ID number
-    let params = new URLSearchParams(location.search);
+    let params = new URLSearchParams(document.location.search);
     if (params.size > 0) {
-        let id = params.get("load").trim();
-        if (id != "" && id !== undefined) {
-            document.querySelector("#charID").value = id;
+        let id = params.get("load");
+        if (id != "" && id !== undefined && id!== null) {
+            document.querySelector("#charID").value = id.trim();
             charGrabber();
         }
         history.pushState({"preloadID": id}, "", (document.location.href).split("?")[0]);
     }
     favlist = new Favlist();
+    userPanel = new UserPanel();
     for (const button of favlist.navigation.children) {
         button.addEventListener("click", favlist.viewChange.bind(favlist))
     }
-    favlist.favButton.children[0].addEventListener("click", favlist.addFavorite.bind(favlist));
+    favlist.favButton.addEventListener("click", favlist.addFavorite.bind(favlist));
     favlist.listUpdate();
+    window.addEventListener("resize", favlist.calculateItemCountLimit.bind(favlist));
+    document.addEventListener("loginAttempt", userPanel.login.bind(userPanel));
 });

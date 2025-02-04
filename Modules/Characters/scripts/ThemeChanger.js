@@ -28,6 +28,12 @@ function switchTheme(themeName) {
 			colorFields.set("navColorB", "#005977cc");
 			colorFields.set("mainBase", "#002936a1");
 			break;
+		case "ambr":
+			colorFields.set("gradientBase", "#774400");
+			colorFields.set("navColorA", "#ffac59aa");
+			colorFields.set("navColorB", "#613700cc");
+			colorFields.set("mainBase", "#361400a1");
+			break;
 		default:
 			colorFields.set("gradientBase", "#770059");
 			colorFields.set("navColorA", "#ff33ccaa");
@@ -48,6 +54,7 @@ function keyReader (e) {
 	if (letterSequence.includes("red")) switchTheme("red");
 	if (letterSequence.includes("blue")) switchTheme("blue");
 	if (letterSequence.includes("cyan")) switchTheme("cyan");
+	if (letterSequence.includes("ambr")) switchTheme("ambr");
 	if (letterSequence.includes("base")) switchTheme();
 }
 
