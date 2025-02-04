@@ -12,7 +12,6 @@ RewriteCond %{HTTP:CF-Visitor} !{"scheme":"https"}
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 RewriteCond %{REQUEST_FILENAME} !-f
-
 RewriteRule ^ index.php [L]
 
 <IfModule mod_expires.c>

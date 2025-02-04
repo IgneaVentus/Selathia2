@@ -1,9 +1,19 @@
 <?php
 	namespace App;
 
-	// Loading models and controllers
-	// require "./controllers";
-	// require "./models";
+	require_once("./bootloader.php");
+
+	use App\Characters\DataServer;
+use App\Models\User;
+
+	use function App\Controllers\Auth\authenticate;
+
+	//Error shit
+	error_reporting(E_ALL);
+	ini_set('ignore_repeated_errors', TRUE);
+	ini_set('display_errors', TRUE);
+	ini_set('log_errors', TRUE);
+	ini_set("error_log", "./debug.log");
 
 	// Routing section
 	$request_uri = explode("?", $_SERVER["REQUEST_URI"], 2);
@@ -25,12 +35,6 @@
 					break;
 				case "Schools":
 					require "./funstuff/schools.html";
-					break;
-				case "Characters":
-					if (isset($request_tree[2])) {
-						if ($request_tree[2] == "API") require "./funstuff/Characters/scripts/server.php";
-					}
-					else require "./funstuff/Characters/home.html";
 					break;
 				case "Shimmer":
 					require "./funstuff/shimmer.html";
@@ -55,32 +59,24 @@
 		case "Special":
 			require "./funstuff/infu.html";
 			break;
-		// case "Serverside":
-		// 	echo "Got ere' ".$request_tree[1];
-		// 	if ($request_tree[1]=="Initialize") {
-		// 		Models\initialize();
-		// 	}
-		// 	break;
-		case "api":
-			switch ($request_tree[1]) {
-				// case "CRUD":
-				// 	Controllers\CRUD\requestManager($request_method);
-				// 	break;
-				case "Home":
-				case "":
-					Controllers\Home\requestManager($request_method);
-					break;
+		case "API":
+			if (isset($request_tree[1])) {
+				switch ($request_tree[1]) {
+					case "Login": 
+						echo authenticate();
+						return 1;
+						break;
+					case "Reboot":
+						echo User::restartTable();
+						return 1;
+						break;
+				}
 			}
-			break;
-		// case "CRUD":
-		// 	return Controllers\CRUD\initialize();
-		// 	break;
+		case "Characters":
 		case "Home":
 		case "":
-			return Controllers\Home\initialize();
-			break;
-		case "TEST":
-			require "./tester.php";
+			if (isset($request_tree[1])) DataServer::view($request_tree[1]);
+			else DataServer::view("");
 			break;
 		default: 
 			phpinfo();

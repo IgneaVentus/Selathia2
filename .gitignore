@@ -2,4 +2,8 @@ debug.txt
 funstuff/DomainStory/data/data.db
 data.db
 run.bat
-funstuff/Characters/data
+Modules/Characters/data
+Modules/Characters/data/341.json
+archive
+Modules/Global/Data
+debug.log

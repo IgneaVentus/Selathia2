@@ -42,7 +42,7 @@ class Character {
         this.#desc["psyche"] = dataset.psyche;
         this.#dataTable.set("charDesc > #innerDesc", this.#desc["visage"].txt  + "\n\n" + this.#desc["psyche"]);
         // Check whether character has a portait - if not, set portrait to 0 for further processing
-        this.#dataTable.set("portrait", this.#desc["visage"].type == "img" ? this.#desc["visage"].content : 0);
+        this.#dataTable.set("portrait", this.#desc["visage"].type == "img" ? "Modules/Characters/data/"+this.#desc["visage"].content : 0);
 
         //running support functions
         this.#itemRepeater(dataset.equipment);
@@ -436,7 +436,7 @@ async function charGrabber () {
     let id = document.querySelector("#charID").value.trim();
     if (id !== undefined) {
         if (!charNav.includes(id)) {
-            fetch("/Misc/Characters/API?q="+id)
+            fetch("/Characters/API?q="+id)
             .then(data => data.json())
             .then(data => {
                 charList[id] = new Character(data);
@@ -469,7 +469,6 @@ function charChange(direction) {
     }
     // Load direct id
     else currentChar = direction;
-    console.log(currentChar);
 
     charList[charNav[currentChar]].present();
     charNavUpdate();
@@ -556,6 +555,6 @@ window.addEventListener("load", (e) => {
     }
     favlist.favButton.addEventListener("click", favlist.addFavorite.bind(favlist));
     favlist.listUpdate();
-    window.addEventListener("resize", favlist.calculateItemCountLimit);
+    window.addEventListener("resize", favlist.calculateItemCountLimit.bind(favlist));
     document.addEventListener("loginAttempt", userPanel.login.bind(userPanel));
 });
